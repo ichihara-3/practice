@@ -112,13 +112,18 @@ def atom(token):
             return Symbol(token)
 
 
+def to_string(exp):
+    return '({})'.format(' '.join(map(to_string, exp))) if isa(exp, list) else str(exp)
+
+
+
 prompt = 'lis.py> '
 
 
 def repl():
     while True:
         val = input(prompt)
-        print(eval(parse(val)))
+        print(to_string(eval(parse(val))))
 
 
 if __name__ == '__main__':
