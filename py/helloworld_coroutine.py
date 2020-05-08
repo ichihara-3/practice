@@ -22,8 +22,8 @@ async def main():
 
     print(f"started at {time.strftime('%X')}")
 
-    await task1
     await task2
+    await task1
 
     print(f"finished at {time.strftime('%X')}")
 
