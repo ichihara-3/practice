@@ -16,7 +16,6 @@ def proxy(url):
         "url": url,
         "headers": headers,
     }
-    print(headers)
     req_params['data'] = request.body.read()
 
     res = requests.request(**req_params)
