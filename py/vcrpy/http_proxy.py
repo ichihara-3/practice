@@ -9,13 +9,14 @@ app = Bottle()
 @app.route("<url:re:.*>", method="ANY")
 def proxy(url):
     headers = dict(**request.headers)
-    headers["X-FORWARDED-FOR"] = request.get_header("HOST")
+    headers["X-FORWARDED-FOR"] = request.remote_addr
 
     req_params = {
         "method": request.method,
         "url": url,
         "headers": headers,
     }
+    print(headers)
     req_params['data'] = request.body.read()
 
     res = requests.request(**req_params)
