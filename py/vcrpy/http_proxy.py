@@ -1,3 +1,4 @@
+import logging
 from bottle import Bottle, run, request
 import requests
 
@@ -5,21 +6,25 @@ import requests
 app = Bottle()
 
 
-@app.route("/", method="ANY")
-def proxy():
-    lines = []
-    for k, v in request.headers.items():
-        lines.append(f"{k}={v}")
-    body = "<br>".join(lines)
+@app.route("<url:re:.*>", method="ANY")
+def proxy(url):
+    headers = dict(**request.headers)
+    headers["X-FORWARDED-FOR"] = request.get_header("HOST")
 
-    body += request.body.read().decode()
-    return body
+    req_params = {
+        "method": request.method,
+        "url": url,
+        "headers": headers,
+    }
+    req_params['data'] = request.body.read()
+
+    res = requests.request(**req_params)
+    return res.text
 
 
 def main():
     port = 8000
-    host = "localhost"
-    run(app, host=host, port=port)
+    run(app, port=port)
 
 
 if __name__ == "__main__":
