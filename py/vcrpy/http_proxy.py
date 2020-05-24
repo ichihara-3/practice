@@ -8,7 +8,7 @@ app = Bottle()
 
 
 @app.route("<url:re:.*>", method="ANY")
-@vcr.use_cassette(record_mode='new_episodes')
+@vcr.use_cassette(record_mode="new_episodes")
 def proxy(url):
     headers = dict(**request.headers)
     headers["X-FORWARDED-FOR"] = request.remote_addr
@@ -18,10 +18,12 @@ def proxy(url):
         "url": url,
         "headers": headers,
     }
-    req_params['data'] = request.body.read()
+    req_params["data"] = request.body.read()
 
     res = requests.request(**req_params)
-    response = HTTPResponse(body=res.text, status=res.status_code, headers=dict(res.headers))
+    response = HTTPResponse(
+        body=res.text, status=res.status_code, headers=dict(res.headers)
+    )
     return response
 
 
