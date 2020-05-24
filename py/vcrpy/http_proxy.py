@@ -1,12 +1,14 @@
 import logging
 from bottle import Bottle, run, request
 import requests
+import vcr
 
 
 app = Bottle()
 
 
 @app.route("<url:re:.*>", method="ANY")
+@vcr.use_cassette(record_mode='new_episodes')
 def proxy(url):
     headers = dict(**request.headers)
     headers["X-FORWARDED-FOR"] = request.remote_addr
