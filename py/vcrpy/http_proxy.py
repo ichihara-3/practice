@@ -1,5 +1,5 @@
 import logging
-from bottle import Bottle, run, request
+from bottle import Bottle, run, request, HTTPResponse
 import requests
 import vcr
 
@@ -21,7 +21,8 @@ def proxy(url):
     req_params['data'] = request.body.read()
 
     res = requests.request(**req_params)
-    return res.text
+    response = HTTPResponse(body=res.text, status=res.status_code, headers=dict(res.headers))
+    return response
 
 
 def main():
