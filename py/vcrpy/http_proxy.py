@@ -1,10 +1,27 @@
-import logging
+import wsgiref
+
 from bottle import Bottle, run, request, HTTPResponse
 import requests
 import vcr
+import bottle
+
+bottle.debug(True)
 
 
-app = Bottle()
+class ProxyBottle(Bottle):
+    def __call__(self, environ, start_response):
+        def wrapped_start_response(status, headerlist, exc_info=None):
+            headerlist = [
+                (key, value)
+                for key, value in headerlist
+                if not wsgiref.util.is_hop_by_hop(key)
+            ]
+            return start_response(status, headerlist, exc_info)
+
+        return self.wsgi(environ, wrapped_start_response)
+
+
+app = ProxyBottle()
 
 
 @app.route("<url:re:.*>", method="ANY")
@@ -17,8 +34,8 @@ def proxy(url):
         "method": request.method,
         "url": url,
         "headers": headers,
+        "data": request.body.read(),
     }
-    req_params["data"] = request.body.read()
 
     res = requests.request(**req_params)
     response = HTTPResponse(
