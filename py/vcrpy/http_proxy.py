@@ -1,7 +1,7 @@
+import argparse
 import wsgiref
 
 from bottle import Bottle, run, request, HTTPResponse
-import argparse
 import bottle
 import requests
 import vcr
