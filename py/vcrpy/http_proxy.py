@@ -1,4 +1,5 @@
 import argparse
+from urllib.parse import urlparse, urlunparse, parse_qs
 import wsgiref
 
 from bottle import Bottle, run, request, HTTPResponse
@@ -14,6 +15,7 @@ class ProxyBottle(Bottle):
         """Wrapping start_response to filter headers,
         because hop-by-hop headers are not allowed in wsgi implementation.
         """
+
         def wrapped_start_response(status, headerlist, exc_info=None):
             headerlist = [
                 (key, value)
@@ -28,15 +30,20 @@ class ProxyBottle(Bottle):
 app = ProxyBottle()
 
 
-@app.route("<url:re:.*>", method="ANY")
+@app.route("<urlstring:re:.*>", method="ANY")
 @vcr.use_cassette(record_mode="new_episodes")
-def proxy(url):
+def proxy(urlstring):
     headers = dict(**request.headers)
     headers["X-FORWARDED-FOR"] = request.remote_addr
+    parsed = urlparse(urlstring)
+
+    url = urlunparse(list(parsed)[:4] + ["", ""])
+    query = parse_qs(parsed[4])
 
     req_params = {
         "method": request.method,
         "url": url,
+        "params": query,
         "headers": headers,
         "data": request.body.read(),
     }
@@ -57,10 +64,11 @@ def main():
 
 def get_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--port', '-p', default=8000, type=int, help='port number to serve')
+    parser.add_argument(
+        "--port", "-p", default=8000, type=int, help="port number to serve"
+    )
 
     return parser.parse_args()
-
 
 
 if __name__ == "__main__":
