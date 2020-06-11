@@ -1,6 +1,3 @@
-import re
-
-
 def sum_numbers(text: str) -> int:
     return sum(map(int, filter(lambda x: x.isdigit(), text.split(' '))))
 
