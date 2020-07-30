@@ -18,7 +18,7 @@ def main():
 
 
 def rec(i, weight, wv):
-    if i == len(wv)-1:
+    if i == len(wv):
         return 0
     if weight < wv[i][0]:
         return rec(i+1, weight, wv)
