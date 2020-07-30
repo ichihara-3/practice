@@ -25,4 +25,5 @@ def rec(i, weight, wv):
     return max(rec(i+1, weight, wv), rec(i+1, weight-wv[i][0], wv) + wv[i][1])
 
 
-main()
+if __name__ == '__main__':
+    main()
