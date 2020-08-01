@@ -3,7 +3,7 @@
 
 # メモ
 # dp[i][w] i番目以降で最大値がwのときの価値
-dp = [[-1 for i in range(101)] for j in range(101)]
+dp = [[-1 for j in range(10001)] for i in range(101)]
 
 def main():
     ans = 0
