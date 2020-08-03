@@ -1,5 +1,9 @@
 # LCS: Longest common subsequence
 
+import sys
+
+sys.setrecursionlimit(1000001)
+
 
 def main():
     S = input()
