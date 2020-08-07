@@ -9,7 +9,7 @@
 #               dp[i-w][j] + v # j番目の商品を使う場合
 #            )
 
-dp = [[0 for _ in range(10001)] for _ in range(101)]
+dp = [[0 for _ in range(101)] for _ in range(100001)]
 
 
 def main():
@@ -24,21 +24,14 @@ def main():
 
 def solve(n, cap, wv):
     for i in range(0, cap + 1):
-        if i == 0:
-            continue
         for j in range(0, n):
             weight = wv[j][0]
             value = wv[j][1]
-            if j == 0:
-                quantity = i // weight
-                dp[i][j] = value * quantity
-                continue
-            for k in range(0, i // weight + 1):
-                dp[i][j] = max(
-                    dp[i][j - 1],
-                    dp[i - k * weight][j] + value * k if i - k * weight >= 0 else 0,
-                )
-    return dp[cap][n - 1]
+            if i < weight:
+                dp[i][j+1] = dp[i][j]
+            else:
+                dp[i][j+1] = max(dp[i][j], dp[i-weight][j+1]+value)
+    return dp[cap][n]
 
 
 if __name__ == "__main__":
