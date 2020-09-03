@@ -7,7 +7,7 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "requested")
+	fmt.Fprintf(w, "requested\n")
 	var headers []string
 	for k, v := range r.Header {
 		headers = append(headers, fmt.Sprintf("%v: %v", k, v))
