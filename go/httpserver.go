@@ -9,7 +9,14 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	defer log(w, r)
+	var status int
+	if r.URL.Path != "/" {
+		status = http.StatusNotFound
+	} else {
+		status = http.StatusOK
+	}
+	defer log(w, r, status)
+	w.WriteHeader(status)
 	fmt.Fprintln(w, "hello")
 }
 
@@ -19,21 +26,21 @@ type CountHandler struct {
 }
 
 func (c *CountHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	defer log(w, r)
+	defer log(w, r, http.StatusOK)
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.n++
 	fmt.Fprintf(w, "count: %v\n", c.n)
 }
 
-func log(w http.ResponseWriter, r *http.Request) {
+func log(w http.ResponseWriter, r *http.Request, status int) {
 	now := time.Now()
 	uri := r.RequestURI
 	var headers []string
 	for k, v := range r.Header {
 		headers = append(headers, fmt.Sprintf("%v: %v", k, v))
 	}
-	fmt.Printf("%v\t%s\tHeaders: %s\n", now, uri, strings.Join(headers, ","))
+	fmt.Printf("%v\t%s\t%d\tHeaders: %s\n", now, uri, status, strings.Join(headers, ","))
 }
 
 func main() {
