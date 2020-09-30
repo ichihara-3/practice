@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-u"""Simple Python REPL implemented with python3
+u"""Simple Python REPL implemented in python3
 """
 import readline
 import rlcompleter
