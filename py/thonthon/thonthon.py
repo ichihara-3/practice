@@ -2,11 +2,15 @@
 u"""Simple Python REPL implemented with python3
 """
 import readline
+import rlcompleter
 import sys
 import traceback
 
 
 __version__ = "0.0.1"
+
+
+readline.parse_and_bind("tab: complete")
 
 
 def repl():
@@ -20,6 +24,8 @@ def repl():
         except (KeyboardInterrupt, EOFError):
             print("Good bye...")
             return 0
+        except NoOutput:
+            pass
         except Exception:
             traceback.print_exc(file=sys.stdout)
 
@@ -50,6 +56,11 @@ def evaluate(lines, globalnamespace, localnamespace):
         return result
     except SyntaxError:
         exec(lines, globalnamespace, localnamespace)
+        raise NoOutput
+
+
+class NoOutput(Exception):
+    pass
 
 
 def main():
