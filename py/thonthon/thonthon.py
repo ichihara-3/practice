@@ -15,9 +15,8 @@ def repl():
     while True:
         try:
             lines = read()
-            result = execute(lines, gn, ln)
-            if result is not None:
-                print(result)
+            result = evaluate(lines, gn, ln)
+            print(result)
         except (KeyboardInterrupt, EOFError):
             print("Good bye...")
             return 0
@@ -45,7 +44,7 @@ def read(prompt1=None, prompt2=None):
     return "\n".join(lines)
 
 
-def execute(lines, globalnamespace, localnamespace):
+def evaluate(lines, globalnamespace, localnamespace):
     try:
         result = eval(lines, globalnamespace, localnamespace)
         return result
