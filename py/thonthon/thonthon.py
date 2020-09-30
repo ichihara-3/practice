@@ -1,21 +1,25 @@
+#!/usr/bin/env python3
+u"""Simple Python REPL implemented with python3
+"""
+import readline
 import sys
 import traceback
 
 
-def main():
-    sys.exit(repl())
+__version__ = "0.0.1"
 
 
 def repl():
     gn = {}
     ln = {}
-
     while True:
         try:
             lines = read()
             result = execute(lines, gn, ln)
-        except KeyboardInterrupt:
-            print('Good bye...')
+            if result is not None:
+                print(result)
+        except (KeyboardInterrupt, EOFError):
+            print("Good bye...")
             return 0
         except Exception:
             traceback.print_exc(file=sys.stdout)
@@ -23,27 +27,39 @@ def repl():
 
 def read(prompt1=None, prompt2=None):
     if prompt1 is None:
-        prompt1 = 'thonthon> '
+        prompt1 = "thonthon> "
     if prompt2 is None:
-        prompt2 = '... '
+        prompt2 = "...     > "
     in_lines = False
 
     lines = []
     line = input(prompt1)
     lines.append(line)
-    if lines[-1] == ':':
+    if line[-1] == ":":
         in_lines = True
     while in_lines:
         line = input(prompt2)
-        in_lines =False
-    return '\n'.join(lines)
-    
-
+        if line.strip().replace("\t", "").replace(" ", "") == "":
+            in_lines = False
+        lines.append(line)
+    return "\n".join(lines)
 
 
 def execute(lines, globalnamespace, localnamespace):
-    exec(lines, globalnamespace, localnamespace)
+    try:
+        result = eval(lines, globalnamespace, localnamespace)
+        return result
+    except SyntaxError:
+        exec(lines, globalnamespace, localnamespace)
 
 
-if __name__ == '__main__':
+def main():
+    sys.exit(repl())
+
+
+if __name__ == "__main__":
+    import sys
+
+    print("thonthon {ver}".format(ver=__version__))
+    print("python version: {pyver}".format(pyver=sys.version))
     main()
