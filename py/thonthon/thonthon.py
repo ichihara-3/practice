@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 u"""Simple Python REPL implemented in python3
 """
+import copy
 import readline
 import rlcompleter
 import sys
@@ -9,12 +10,13 @@ import traceback
 __version__ = "0.0.1"
 
 
+
 readline.parse_and_bind("tab: complete")
 
 
 def repl():
-    gn = globals()
-    ln = locals()
+    gn = {}
+    ln = {}
     while True:
         try:
             lines = read()
@@ -25,6 +27,9 @@ def repl():
         except (KeyboardInterrupt, EOFError):
             print("Good bye...")
             return 0
+        except (SystemExit) as e:
+            print("Good bye...")
+            return e.code
         except NoOutput:
             pass
         except Exception:
