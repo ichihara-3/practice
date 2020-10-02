@@ -13,11 +13,13 @@ readline.parse_and_bind("tab: complete")
 
 
 def repl():
-    gn = {}
-    ln = {}
+    gn = globals()
+    ln = locals()
     while True:
         try:
             lines = read()
+            if not lines:
+                continue
             result = evaluate(lines, gn, ln)
             print(result)
         except (KeyboardInterrupt, EOFError):
@@ -38,8 +40,10 @@ def read(prompt1=None, prompt2=None):
 
     lines = []
     line = input(prompt1)
+    if not line:
+        return ""
     lines.append(line)
-    if line[-1] == ":":
+    if line[-1] in (":", "\\") or _in_brackets(line):
         in_lines = True
     while in_lines:
         line = input(prompt2)
@@ -47,6 +51,19 @@ def read(prompt1=None, prompt2=None):
             in_lines = False
         lines.append(line)
     return "\n".join(lines)
+
+
+def _in_brackets(line):
+    brackets = (
+        ("(", ")"),
+        ("[", "]"),
+        ("{", "}"),
+    )
+    for start, end in brackets:
+        if start in line and end not in line:
+            return True
+    else:
+        return False
 
 
 def evaluate(lines, globalnamespace, localnamespace):
