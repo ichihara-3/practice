@@ -7,19 +7,19 @@ class WS:
 
 
 class Number:
-    pattern = re.compile(r'^-?(0|[1-9]\d*)(\.\d+)?([eE]\d+)?$', re.ASCII)
+    pattern = re.compile(r"^-?(0|[1-9]\d*)(\.\d+)?([eE]\d+)?$", re.ASCII)
 
 
 class String:
     escape_map = {
-        '"': '\"',
-        '\\': '\\',
-        '/': '/',
-        'b': '\b',
-        'f': '\f',
-        'n': '\n',
-        'r': '\r',
-        't': '\t',
+        '"': '"',
+        "\\": "\\",
+        "/": "/",
+        "b": "\b",
+        "f": "\f",
+        "n": "\n",
+        "r": "\r",
+        "t": "\t",
     }
 
 
@@ -40,11 +40,11 @@ def is_string(string):
 
 
 def is_array(string):
-    return string.startswith('[') and string.endswith(']')
+    return string.startswith("[") and string.endswith("]")
 
 
 def is_object(string):
-    return string.startswith('{') and string.endswith('}')
+    return string.startswith("{") and string.endswith("}")
 
 
 def is_number(string):
@@ -53,11 +53,10 @@ def is_number(string):
     return True
 
 
-
 def is_float(string):
     if not is_number(string):
         return False
-    return '.' in string or 'e' in string or 'E' in string
+    return "." in string or "e" in string or "E" in string
 
 
 def is_int(string):
@@ -85,8 +84,7 @@ class Parser:
             else:
                 return int(string)
         else:
-            raise ValueError('invalid object literal: {}'.format(string))
-
+            raise ValueError("invalid object literal: {}".format(string))
 
     def _trim_ws(self, string):
         return string.strip("".join(WS.values))
@@ -117,7 +115,7 @@ class Parser:
         unicode_char = False
         unicode_line = ""
         for s in string[1:]:
-            if s == '\\' and not escaped:
+            if s == "\\" and not escaped:
                 escaped = True
                 continue
             if s == '"' and not escaped:
@@ -127,29 +125,34 @@ class Parser:
                     line += String.escape_map[s]
                     escaped = False
                     continue
-                elif s == 'u':
+                elif s == "u":
                     unicode_char = True
-                    unicode_line += '\\u'
+                    unicode_line += "\\u"
                     continue
                 else:
-                    raise ValueError('non supported escape sequence: {}'.format(string))
+                    raise ValueError("non supported escape sequence: {}".format(string))
             if unicode_char:
                 ordinal = ord(s)
-                if 48 <= ordinal <= 57 or 65 <= ordinal <= 70 or 97 <= ordinal<=102:
+                if 48 <= ordinal <= 57 or 65 <= ordinal <= 70 or 97 <= ordinal <= 102:
                     unicode_line += s
                 else:
-                    raise ValueError('unexpected character while processing escape: {}'.format(string))
+                    raise ValueError(
+                        "unexpected character while processing escape: {}".format(
+                            string
+                        )
+                    )
                 if len(unicode_line) == 6:
                     char = eval('"{}"'.format(unicode_line))
                     line += char
-                    unicode_line = ''
+                    unicode_line = ""
                     unicode_char = False
                     escaped = False
                 continue
             line += s
         else:
-            raise ValueError('unexpected end of line while scanning: {}'.format(string))
+            raise ValueError("unexpected end of line while scanning: {}".format(string))
         if escaped:
-            raise ValueError('unexpected end of line while processing escape: {}'.format(string))
+            raise ValueError(
+                "unexpected end of line while processing escape: {}".format(string)
+            )
         return line
-
