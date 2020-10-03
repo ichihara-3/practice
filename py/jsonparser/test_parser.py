@@ -182,3 +182,21 @@ def test_array_with_ws():
     result = p.parse(string)
 
     assert result == expected
+
+
+def test_array_in_array():
+    p = parser.Parser()
+    string = '''
+    [1, 2, [
+        1, [
+            1, 2, [
+                1, []
+                ]
+            ]
+        ]
+    ]'''
+    expected = [1, 2, [1, [1, 2, [1, []]]]]
+
+    result = p.parse(string)
+
+    assert result == expected

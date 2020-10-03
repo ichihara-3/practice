@@ -16,12 +16,17 @@ class Parser:
         if string[0] == '[':
             contents = []
             element = ''
+            depth = 1
             for s in string[1:]:
+                if s == '[':
+                    depth +=1
                 if s == ']':
-                    if element:
-                        contents.append(element)
-                    break
-                if s == ',':
+                    depth -= 1
+                    if depth == 0:
+                        if element:
+                            contents.append(element)
+                        break
+                if s == ',' and depth == 1:
                     contents.append(element)
                     element = ''
                     continue
