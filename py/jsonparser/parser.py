@@ -74,67 +74,11 @@ class Parser:
         if is_false(string):
             return False
         if is_array(string):
-            contents = []
-            element = ""
-            depth = 1
-            for s in string[1:]:
-                if s == "[":
-                    depth += 1
-                if s == "]":
-                    depth -= 1
-                    if depth == 0:
-                        if element:
-                            contents.append(element)
-                        break
-                if s == "," and depth == 1:
-                    contents.append(element)
-                    element = ""
-                    continue
-                element += s
-            return list(map(self.parse, contents))
+            return self._to_array(string)
         if is_object(string):
             return dict()
         if is_string(string):
-            line = ""
-            escaped = False
-            unicode_char = False
-            unicode_line = ""
-            for s in string[1:]:
-                if s == '\\' and not escaped:
-                    escaped = True
-                    continue
-                if s == '"' and not escaped:
-                    break
-                if escaped and not unicode_char:
-                    if s in String.escape_map:
-                        line += String.escape_map[s]
-                        escaped = False
-                        continue
-                    elif s == 'u':
-                        unicode_char = True
-                        unicode_line += '\\u'
-                        continue
-                    else:
-                        raise ValueError('non supported escape sequence: {}'.format(string))
-                if unicode_char:
-                    ordinal = ord(s)
-                    if 48 <= ordinal <= 57 or 65 <= ordinal <= 70 or 97 <= ordinal<=102:
-                        unicode_line += s
-                    else:
-                        raise ValueError('unexpected character while processing escape: {}'.format(string))
-                    if len(unicode_line) == 6:
-                        char = eval('"{}"'.format(unicode_line))
-                        line += char
-                        unicode_line = ''
-                        unicode_char = False
-                        escaped = False
-                    continue
-                line += s
-            else:
-                raise ValueError('unexpected end of line while scanning: {}'.format(string))
-            if escaped:
-                raise ValueError('unexpected end of line while processing escape: {}'.format(string))
-            return str(line)
+            return self._to_string(string)
         if is_number(string):
             if is_float(string):
                 return float(string)
@@ -146,3 +90,66 @@ class Parser:
 
     def _trim_ws(self, string):
         return string.strip("".join(WS.values))
+
+    def _to_array(self, string):
+        contents = []
+        element = ""
+        depth = 1
+        for s in string[1:]:
+            if s == "[":
+                depth += 1
+            if s == "]":
+                depth -= 1
+                if depth == 0:
+                    if element:
+                        contents.append(element)
+                    break
+            if s == "," and depth == 1:
+                contents.append(element)
+                element = ""
+                continue
+            element += s
+        return list(map(self.parse, contents))
+
+    def _to_string(self, string):
+        line = ""
+        escaped = False
+        unicode_char = False
+        unicode_line = ""
+        for s in string[1:]:
+            if s == '\\' and not escaped:
+                escaped = True
+                continue
+            if s == '"' and not escaped:
+                break
+            if escaped and not unicode_char:
+                if s in String.escape_map:
+                    line += String.escape_map[s]
+                    escaped = False
+                    continue
+                elif s == 'u':
+                    unicode_char = True
+                    unicode_line += '\\u'
+                    continue
+                else:
+                    raise ValueError('non supported escape sequence: {}'.format(string))
+            if unicode_char:
+                ordinal = ord(s)
+                if 48 <= ordinal <= 57 or 65 <= ordinal <= 70 or 97 <= ordinal<=102:
+                    unicode_line += s
+                else:
+                    raise ValueError('unexpected character while processing escape: {}'.format(string))
+                if len(unicode_line) == 6:
+                    char = eval('"{}"'.format(unicode_line))
+                    line += char
+                    unicode_line = ''
+                    unicode_char = False
+                    escaped = False
+                continue
+            line += s
+        else:
+            raise ValueError('unexpected end of line while scanning: {}'.format(string))
+        if escaped:
+            raise ValueError('unexpected end of line while processing escape: {}'.format(string))
+        return line
+
