@@ -1,5 +1,116 @@
 import parser
 
+def test_is_null():
+    string = "null"
+    assert parser.is_null(string) is True
+
+    string = "true"
+    assert parser.is_null(string) is False
+
+
+def test_is_true():
+    string = "true"
+    assert parser.is_true(string) is True
+
+    string = "false"
+    assert parser.is_true(string) is False
+
+
+def test_is_false():
+    string = "false"
+    assert parser.is_false(string) is True
+
+    string = "true"
+    assert parser.is_false(string) is False
+
+
+def test_is_string():
+    string = '"valid"'
+    assert parser.is_string(string) is True
+
+    string = '"invalid1'
+    assert parser.is_string(string) is False
+
+    string = 'invalid2"'
+    assert parser.is_string(string) is False
+
+    string = 'invalid3'
+    assert parser.is_string(string) is False
+
+
+def test_is_array():
+    string = '[valid]'
+    assert parser.is_array(string) is True
+
+    string = '[invalid1'
+    assert parser.is_array(string) is False
+
+    string = 'invalid2]'
+    assert parser.is_array(string) is False
+
+    string = 'invalid3'
+    assert parser.is_array(string) is False
+
+
+def test_is_object():
+    string = '{valid}'
+    assert parser.is_object(string) is True
+
+    string = '{invalid1'
+    assert parser.is_object(string) is False
+
+    string = 'invalid2}'
+    assert parser.is_object(string) is False
+
+    string = 'invalid3'
+    assert parser.is_object(string) is False
+
+
+def test_is_number():
+    string = '1'
+    assert parser.is_number(string) is True
+
+    string = '"1"'
+    assert parser.is_number(string) is False
+
+    string = '-1'
+    assert parser.is_number(string) is True
+
+    string = '-0'
+    assert parser.is_number(string) is True
+
+    string = '-1.1'
+    assert parser.is_number(string) is True
+
+    string = '-1.111'
+    assert parser.is_number(string) is True
+
+    string = '-1.111'
+    assert parser.is_number(string) is True
+
+    string = '-1.111e10'
+    assert parser.is_number(string) is True
+
+    string = '-1.111E10'
+    assert parser.is_number(string) is True
+
+    string = '1E10'
+    assert parser.is_number(string) is True
+
+    string = '1E10.10'
+    assert parser.is_number(string) is False
+
+    string = '1E'
+    assert parser.is_number(string) is False
+
+    string = '１Ｅ'
+    assert parser.is_number(string) is False
+
+    string = '-01'
+    assert parser.is_number(string) is False
+
+    string = '1.'
+    assert parser.is_number(string) is False
 
 def test_int():
     p = parser.Parser()
@@ -204,6 +315,16 @@ def test_array_in_array():
         ]
     ]"""
     expected = [1, 2, [1, [1, 2, [1, []]]]]
+
+    result = p.parse(string)
+
+    assert result == expected
+
+
+def test_empty_object():
+    p = parser.Parser()
+    string = "{}"
+    expected = {}
 
     result = p.parse(string)
 

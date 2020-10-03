@@ -1,18 +1,66 @@
+import re
+
+
 class WS:
 
     values = ("\x20", "\x09", "\x0a", "\x0d")
 
 
+class Number:
+    pattern = re.compile(r'^-?(0|[1-9]\d*)(\.\d+)?([eE]\d+)?$', re.ASCII)
+
+
+def is_null(string):
+    return string == "null"
+
+
+def is_true(string):
+    return string == "true"
+
+
+def is_false(string):
+    return string == "false"
+
+
+def is_string(string):
+    return string.startswith('"') and string.endswith('"')
+
+
+def is_array(string):
+    return string.startswith('[') and string.endswith(']')
+
+
+def is_object(string):
+    return string.startswith('{') and string.endswith('}')
+
+
+def is_number(string):
+    if Number.pattern.match(string) is None:
+        return False
+    return True
+
+
+
+def is_float(string):
+    if not is_number(string):
+        return False
+    return '.' in string or 'e' in string or 'E' in string
+
+
+def is_int(string):
+    return is_number(string) and not is_float(string)
+
+
 class Parser:
     def parse(self, string):
         string = self._trim_ws(string)
-        if string == "null":
+        if is_null(string):
             return None
-        if string == "true":
+        if is_true(string):
             return True
-        if string == "false":
+        if is_false(string):
             return False
-        if string[0] == "[":
+        if is_array(string):
             contents = []
             element = ""
             depth = 1
@@ -31,7 +79,9 @@ class Parser:
                     continue
                 element += s
             return list(map(self.parse, contents))
-        if string[0] == '"':
+        if is_object(string):
+            return dict()
+        if is_string(string):
             line = ""
             escaped = False
             unicode_char = False
@@ -72,9 +122,14 @@ class Parser:
                     continue
                 line += s
             return str(line)
-        if "." in string:
-            return float(string)
-        return int(string)
+        if is_number(string):
+            if is_float(string):
+                return float(string)
+            else:
+                return int(string)
+        else:
+            raise ValueError('invalid object literal: {}'.format(string))
+
 
     def _trim_ws(self, string):
         return string.strip("".join(WS.values))
