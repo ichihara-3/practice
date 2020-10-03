@@ -10,6 +10,19 @@ class Number:
     pattern = re.compile(r'^-?(0|[1-9]\d*)(\.\d+)?([eE]\d+)?$', re.ASCII)
 
 
+class String:
+    escape_map = {
+        '"': '\"',
+        '\\': '\\',
+        '/': '/',
+        'b': '\b',
+        'f': '\f',
+        'n': '\n',
+        'r': '\r',
+        't': '\t',
+    }
+
+
 def is_null(string):
     return string == "null"
 
@@ -93,18 +106,8 @@ class Parser:
                 if s == '"' and not escaped:
                     break
                 if escaped and not unicode_char:
-                    escape_map = {
-                        '"': '\"',
-                        '\\': '\\',
-                        '/': '/',
-                        'b': '\b',
-                        'f': '\f',
-                        'n': '\n',
-                        'r': '\r',
-                        't': '\t',
-                    }
-                    if s in escape_map:
-                        line += escape_map[s]
+                    if s in String.escape_map:
+                        line += String.escape_map[s]
                         escaped = False
                         continue
                     elif s == 'u':
