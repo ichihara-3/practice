@@ -63,8 +63,8 @@ def test_str_surrounded_by_ws():
 
 def test_str_with_escape():
     p = parser.Parser()
-    string = ""
-    expected = Ellipsis
+    string = r'"\" \\ \/ \b \f \n \r \t \uFFFF"'
+    expected = "\" \\ / \b \f \n \r \t \uFFFF"
 
     result = p.parse(string)
 

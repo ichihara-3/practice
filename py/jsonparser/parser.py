@@ -33,9 +33,43 @@ class Parser:
             return list(map(self.parse, contents))
         if string[0] == '"':
             line = ""
+            escaped = False
+            unicode_char = False
+            unicode_line = ""
             for s in string[1:]:
-                if s == '"':
+                if s == '\\' and not escaped:
+                    escaped = True
+                    continue
+                if s == '"' and not escaped:
                     break
+                if escaped:
+                    escape_map = {
+                        '"': '\"',
+                        '\\': '\\',
+                        '/': '/',
+                        'b': '\b',
+                        'f': '\f',
+                        'n': '\n',
+                        'r': '\r',
+                        't': '\t',
+                    }
+                    if s in escape_map:
+                        line += escape_map[s]
+                        escaped = False
+                        continue
+                    if s == 'u':
+                        unicode_char = True
+                        unicode_line += '\\u'
+                        continue
+                if unicode_char:
+                    unicode_line += s
+                    if len(unicode_line) == 6:
+                        char = eval('"{}"'.format(unicode_line))
+                        line += char
+                        unicode_line = ''
+                        unicode_char = False
+                        escaped = False
+                    continue
                 line += s
             return str(line)
         if "." in string:
