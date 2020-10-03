@@ -117,6 +117,34 @@ class TestValues:
         assert parser.is_number(string) is False
 
 
+    def test_is_float(self):
+        string = '1.0'
+        assert parser.is_float(string) is True
+
+        string = '-1.0e10'
+        assert parser.is_float(string) is True
+
+        string = '1'
+        assert parser.is_float(string) is False
+
+        string = '"xxxx"'
+        assert parser.is_float(string) is False
+
+
+    def test_is_int(self):
+        string = '10'
+        assert parser.is_int(string) is True
+
+        string = '-100'
+        assert parser.is_int(string) is True
+
+        string = '10.5'
+        assert parser.is_int(string) is False
+
+        string = '"xxxx"'
+        assert parser.is_int(string) is False
+
+
 class TestParser:
 
     def test_int(self):
