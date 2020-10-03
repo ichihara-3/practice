@@ -181,8 +181,8 @@ class TestParser:
 
     def test_str_with_escape(self):
         p = parser.Parser()
-        string = r'"\" \\ \/ \b \f \n \r \t \uFFFF"'
-        expected = "\" \\ / \b \f \n \r \t \uFFFF"
+        string = r'"\" \\ \/ \b \f \n \r \t \uFFFF\u1234"'
+        expected = "\" \\ / \b \f \n \r \t \uFFFF\u1234"
 
         result = p.parse(string)
 
@@ -336,4 +336,41 @@ class TestParser:
         result = p.parse(string)
 
         assert result == expected
+
+
+    def test_invalid_literal(self):
+        p = parser.Parser()
+        string = "1a2b3c"
+        with pytest.raises(ValueError):
+            p.parse(string)
+
+        p = parser.Parser()
+        string = r'"\a\b\c\d"'
+        with pytest.raises(ValueError):
+            p.parse(string)
+
+        p = parser.Parser()
+        string = r'"\u123"'
+        with pytest.raises(ValueError):
+            p.parse(string)
+
+        p = parser.Parser()
+        string = r'"\"'
+        with pytest.raises(ValueError):
+            p.parse(string)
+
+        p = parser.Parser()
+        string = r'"\uXXXX"'
+        with pytest.raises(ValueError):
+            p.parse(string)
+
+        p = parser.Parser()
+        string = '[1,2,3,'
+        with pytest.raises(ValueError):
+            p.parse(string)
+
+        p = parser.Parser()
+        string = '{1:'
+        with pytest.raises(ValueError):
+            p.parse(string)
 

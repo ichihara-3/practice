@@ -92,7 +92,7 @@ class Parser:
                     continue
                 if s == '"' and not escaped:
                     break
-                if escaped:
+                if escaped and not unicode_char:
                     escape_map = {
                         '"': '\"',
                         '\\': '\\',
@@ -107,12 +107,18 @@ class Parser:
                         line += escape_map[s]
                         escaped = False
                         continue
-                    if s == 'u':
+                    elif s == 'u':
                         unicode_char = True
                         unicode_line += '\\u'
                         continue
+                    else:
+                        raise ValueError('non supported escape sequence: {}'.format(string))
                 if unicode_char:
-                    unicode_line += s
+                    ordinal = ord(s)
+                    if 48 <= ordinal <= 57 or 65 <= ordinal <= 70 or 97 <= ordinal<=102:
+                        unicode_line += s
+                    else:
+                        raise ValueError('unexpected character while processing escape: {}'.format(string))
                     if len(unicode_line) == 6:
                         char = eval('"{}"'.format(unicode_line))
                         line += char
@@ -121,6 +127,10 @@ class Parser:
                         escaped = False
                     continue
                 line += s
+            else:
+                raise ValueError('unexpected end of line while scanning: {}'.format(string))
+            if escaped:
+                raise ValueError('unexpected end of line while processing escape: {}'.format(string))
             return str(line)
         if is_number(string):
             if is_float(string):
