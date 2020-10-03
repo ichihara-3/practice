@@ -1,331 +1,339 @@
 import parser
+import pytest
 
-def test_is_null():
-    string = "null"
-    assert parser.is_null(string) is True
 
-    string = "true"
-    assert parser.is_null(string) is False
+class TestValues:
 
+    def test_is_null(self):
+        string = "null"
+        assert parser.is_null(string) is True
 
-def test_is_true():
-    string = "true"
-    assert parser.is_true(string) is True
+        string = "true"
+        assert parser.is_null(string) is False
 
-    string = "false"
-    assert parser.is_true(string) is False
 
+    def test_is_true(self):
+        string = "true"
+        assert parser.is_true(string) is True
 
-def test_is_false():
-    string = "false"
-    assert parser.is_false(string) is True
+        string = "false"
+        assert parser.is_true(string) is False
 
-    string = "true"
-    assert parser.is_false(string) is False
 
+    def test_is_false(self):
+        string = "false"
+        assert parser.is_false(string) is True
 
-def test_is_string():
-    string = '"valid"'
-    assert parser.is_string(string) is True
+        string = "true"
+        assert parser.is_false(string) is False
 
-    string = '"invalid1'
-    assert parser.is_string(string) is False
 
-    string = 'invalid2"'
-    assert parser.is_string(string) is False
+    def test_is_string(self):
+        string = '"valid"'
+        assert parser.is_string(string) is True
 
-    string = 'invalid3'
-    assert parser.is_string(string) is False
+        string = '"invalid1'
+        assert parser.is_string(string) is False
 
+        string = 'invalid2"'
+        assert parser.is_string(string) is False
 
-def test_is_array():
-    string = '[valid]'
-    assert parser.is_array(string) is True
+        string = 'invalid3'
+        assert parser.is_string(string) is False
 
-    string = '[invalid1'
-    assert parser.is_array(string) is False
 
-    string = 'invalid2]'
-    assert parser.is_array(string) is False
+    def test_is_array(self):
+        string = '[valid]'
+        assert parser.is_array(string) is True
 
-    string = 'invalid3'
-    assert parser.is_array(string) is False
+        string = '[invalid1'
+        assert parser.is_array(string) is False
 
+        string = 'invalid2]'
+        assert parser.is_array(string) is False
 
-def test_is_object():
-    string = '{valid}'
-    assert parser.is_object(string) is True
+        string = 'invalid3'
+        assert parser.is_array(string) is False
 
-    string = '{invalid1'
-    assert parser.is_object(string) is False
 
-    string = 'invalid2}'
-    assert parser.is_object(string) is False
+    def test_is_object(self):
+        string = '{valid}'
+        assert parser.is_object(string) is True
 
-    string = 'invalid3'
-    assert parser.is_object(string) is False
+        string = '{invalid1'
+        assert parser.is_object(string) is False
 
+        string = 'invalid2}'
+        assert parser.is_object(string) is False
 
-def test_is_number():
-    string = '1'
-    assert parser.is_number(string) is True
+        string = 'invalid3'
+        assert parser.is_object(string) is False
 
-    string = '"1"'
-    assert parser.is_number(string) is False
 
-    string = '-1'
-    assert parser.is_number(string) is True
+    def test_is_number(self):
+        string = '1'
+        assert parser.is_number(string) is True
 
-    string = '-0'
-    assert parser.is_number(string) is True
+        string = '"1"'
+        assert parser.is_number(string) is False
 
-    string = '-1.1'
-    assert parser.is_number(string) is True
+        string = '-1'
+        assert parser.is_number(string) is True
 
-    string = '-1.111'
-    assert parser.is_number(string) is True
+        string = '-0'
+        assert parser.is_number(string) is True
 
-    string = '-1.111'
-    assert parser.is_number(string) is True
+        string = '-1.1'
+        assert parser.is_number(string) is True
 
-    string = '-1.111e10'
-    assert parser.is_number(string) is True
+        string = '-1.111'
+        assert parser.is_number(string) is True
 
-    string = '-1.111E10'
-    assert parser.is_number(string) is True
+        string = '-1.111'
+        assert parser.is_number(string) is True
 
-    string = '1E10'
-    assert parser.is_number(string) is True
+        string = '-1.111e10'
+        assert parser.is_number(string) is True
 
-    string = '1E10.10'
-    assert parser.is_number(string) is False
+        string = '-1.111E10'
+        assert parser.is_number(string) is True
 
-    string = '1E'
-    assert parser.is_number(string) is False
+        string = '1E10'
+        assert parser.is_number(string) is True
 
-    string = '１Ｅ'
-    assert parser.is_number(string) is False
+        string = '1E10.10'
+        assert parser.is_number(string) is False
 
-    string = '-01'
-    assert parser.is_number(string) is False
+        string = '1E'
+        assert parser.is_number(string) is False
 
-    string = '1.'
-    assert parser.is_number(string) is False
+        string = '１Ｅ'
+        assert parser.is_number(string) is False
 
-def test_int():
-    p = parser.Parser()
+        string = '-01'
+        assert parser.is_number(string) is False
 
-    string = "1"
-    expected = 1
+        string = '1.'
+        assert parser.is_number(string) is False
 
-    result = p.parse(string)
-    assert result == expected
 
+class TestParser:
 
-def test_int_surrounded_by_ws():
-    p = parser.Parser()
+    def test_int(self):
+        p = parser.Parser()
 
-    string = "\t\r\n 1 \t\r\n "
-    expected = 1
+        string = "1"
+        expected = 1
 
-    result = p.parse(string)
-    assert result == expected
+        result = p.parse(string)
+        assert result == expected
 
 
-def test_float():
-    p = parser.Parser()
-    string = "1.5"
-    expected = 1.5
+    def test_int_surrounded_by_ws(self):
+        p = parser.Parser()
 
-    result = p.parse(string)
+        string = "\t\r\n 1 \t\r\n "
+        expected = 1
 
-    assert result == expected
+        result = p.parse(string)
+        assert result == expected
 
 
-def test_float_surrounded_by_ws():
-    p = parser.Parser()
-    string = " \t\r\n1.5 \t\r\n     "
-    expected = 1.5
+    def test_float(self):
+        p = parser.Parser()
+        string = "1.5"
+        expected = 1.5
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_str():
-    p = parser.Parser()
-    string = '"string"'
-    expected = "string"
+    def test_float_surrounded_by_ws(self):
+        p = parser.Parser()
+        string = " \t\r\n1.5 \t\r\n     "
+        expected = 1.5
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_str_surrounded_by_ws():
-    p = parser.Parser()
-    string = ' \t\r\n "string" \t\r\n     '
-    expected = "string"
+    def test_str(self):
+        p = parser.Parser()
+        string = '"string"'
+        expected = "string"
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_str_with_escape():
-    p = parser.Parser()
-    string = r'"\" \\ \/ \b \f \n \r \t \uFFFF"'
-    expected = "\" \\ / \b \f \n \r \t \uFFFF"
+    def test_str_surrounded_by_ws(self):
+        p = parser.Parser()
+        string = ' \t\r\n "string" \t\r\n     '
+        expected = "string"
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_empty_str():
-    p = parser.Parser()
-    string = '""'
-    expected = ""
+    def test_str_with_escape(self):
+        p = parser.Parser()
+        string = r'"\" \\ \/ \b \f \n \r \t \uFFFF"'
+        expected = "\" \\ / \b \f \n \r \t \uFFFF"
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_null():
-    p = parser.Parser()
-    string = "null"
-    expected = None
+    def test_empty_str(self):
+        p = parser.Parser()
+        string = '""'
+        expected = ""
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_null_surrounded_by_ws():
-    p = parser.Parser()
-    string = " \t\r\n null \t\r\n "
-    expected = None
+    def test_null(self):
+        p = parser.Parser()
+        string = "null"
+        expected = None
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_true():
-    p = parser.Parser()
-    string = "true"
-    expected = True
+    def test_null_surrounded_by_ws(self):
+        p = parser.Parser()
+        string = " \t\r\n null \t\r\n "
+        expected = None
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_true_surrounded_by_ws():
-    p = parser.Parser()
-    string = " \t\r\n true \t\r\n "
-    expected = True
+    def test_true(self):
+        p = parser.Parser()
+        string = "true"
+        expected = True
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_false():
-    p = parser.Parser()
-    string = "false"
-    expected = False
+    def test_true_surrounded_by_ws(self):
+        p = parser.Parser()
+        string = " \t\r\n true \t\r\n "
+        expected = True
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_false_surrounded_by_ws():
-    p = parser.Parser()
-    string = " \t\r\n false \t\r\n "
-    expected = False
+    def test_false(self):
+        p = parser.Parser()
+        string = "false"
+        expected = False
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_empty_array():
+    def test_false_surrounded_by_ws(self):
+        p = parser.Parser()
+        string = " \t\r\n false \t\r\n "
+        expected = False
 
-    p = parser.Parser()
-    string = "[]"
-    expected = []
+        result = p.parse(string)
 
-    result = p.parse(string)
+        assert result == expected
 
-    assert result == expected
 
+    def test_empty_array(self):
 
-def test_int_in_array():
-    p = parser.Parser()
-    string = "[1,10]"
-    expected = [1, 10]
+        p = parser.Parser()
+        string = "[]"
+        expected = []
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_str_in_array():
-    p = parser.Parser()
-    string = '["a","helloworldxxx"]'
-    expected = ["a", "helloworldxxx"]
+    def test_int_in_array(self):
+        p = parser.Parser()
+        string = "[1,10]"
+        expected = [1, 10]
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_values_in_array():
-    p = parser.Parser()
-    string = "[null,true,false]"
-    expected = [None, True, False]
+    def test_str_in_array(self):
+        p = parser.Parser()
+        string = '["a","helloworldxxx"]'
+        expected = ["a", "helloworldxxx"]
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_array_with_ws():
-    p = parser.Parser()
-    string = "\n  \t \r [ \n\r\t null \r \t \n ,\r\n\t true \r\n\t ,        false \t\t\t\t\t\t\r\n]    \r\n"
-    expected = [None, True, False]
+    def test_values_in_array(self):
+        p = parser.Parser()
+        string = "[null,true,false]"
+        expected = [None, True, False]
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_array_in_array():
-    p = parser.Parser()
-    string = """
-    [1, 2, [
-        1, [
-            1, 2, [
-                1, []
+    def test_array_with_ws(self):
+        p = parser.Parser()
+        string = "\n  \t \r [ \n\r\t null \r \t \n ,\r\n\t true \r\n\t ,        false \t\t\t\t\t\t\r\n]    \r\n"
+        expected = [None, True, False]
+
+        result = p.parse(string)
+
+        assert result == expected
+
+
+    def test_array_in_array(self):
+        p = parser.Parser()
+        string = """
+        [1, 2, [
+            1, [
+                1, 2, [
+                    1, []
+                    ]
                 ]
             ]
-        ]
-    ]"""
-    expected = [1, 2, [1, [1, 2, [1, []]]]]
+        ]"""
+        expected = [1, 2, [1, [1, 2, [1, []]]]]
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
 
 
-def test_empty_object():
-    p = parser.Parser()
-    string = "{}"
-    expected = {}
+    def test_empty_object(self):
+        p = parser.Parser()
+        string = "{}"
+        expected = {}
 
-    result = p.parse(string)
+        result = p.parse(string)
 
-    assert result == expected
+        assert result == expected
+
