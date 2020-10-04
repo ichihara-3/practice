@@ -26,6 +26,7 @@ class String:
 def is_ws(char):
     return char in Ws.values
 
+
 def is_null(string):
     return string == "null"
 
@@ -82,9 +83,9 @@ class Parser:
             content = self._trim_ws(string[1:-1])
             if content == "":
                 return result
-            elements = content.split(',')
+            elements = content.split(",")
             for e in elements:
-                k, v = e.split(':')
+                k, v = e.split(":")
                 result[self._to_string(k)] = self.parse(v)
             return result
         if is_string(string):
