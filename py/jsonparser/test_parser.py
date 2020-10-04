@@ -335,6 +335,15 @@ class TestParser:
 
         assert result == expected
 
+    def test_object_one_pair_str(self):
+        p = parser.Parser()
+        string = '{"key":"value"}'
+        expected = {"key": "value"}
+
+        result = p.parse(string)
+
+        assert result == expected
+
     def test_invalid_literal(self):
         p = parser.Parser()
         string = "1a2b3c"
