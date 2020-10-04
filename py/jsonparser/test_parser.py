@@ -337,8 +337,26 @@ class TestParser:
 
     def test_object_one_pair_str(self):
         p = parser.Parser()
-        string = '{"key":"value"}'
+        string = '{"key": "value"}'
         expected = {"key": "value"}
+
+        result = p.parse(string)
+
+        assert result == expected
+
+    def test_object_one_pair_int(self):
+        p = parser.Parser()
+        string = '{"key": 1234}'
+        expected = {"key": 1234}
+
+        result = p.parse(string)
+
+        assert result == expected
+
+    def test_object_one_pair_float(self):
+        p = parser.Parser()
+        string = '{"key": -1234.56e78}'
+        expected = {"key": -1234.56e78}
 
         result = p.parse(string)
 
