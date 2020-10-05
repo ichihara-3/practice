@@ -102,6 +102,7 @@ class Parser:
         return string.strip("".join(WS.values))
 
     def _to_array(self, string):
+        string = self._trim_ws(string)
         contents = []
         element = ""
         depth = 1
@@ -122,6 +123,7 @@ class Parser:
         return list(map(self.parse, contents))
 
     def _to_string(self, string):
+        string = self._trim_ws(string)
         line = ""
         escaped = False
         unicode_char = False
@@ -168,3 +170,8 @@ class Parser:
                 "unexpected end of line while processing escape: {}".format(string)
             )
         return line
+
+
+if __name__ == '__main__':
+    p = Parser()
+    print(p.parse( '{"int": 1234, "float": -1234.56e78, "str": "onetwothreefour"}'))

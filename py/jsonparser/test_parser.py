@@ -362,6 +362,15 @@ class TestParser:
 
         assert result == expected
 
+    def test_multiple_members(self):
+        p = parser.Parser()
+        string = '{"int": 1234, "float": -1234.56e78, "str": "onetwothreefour"}'
+        expected = {"int": 1234, "float": -1.23456e81, "str": "onetwothreefour"}
+
+        result = p.parse(string)
+
+        assert result == expected
+
     def test_invalid_literal(self):
         p = parser.Parser()
         string = "1a2b3c"
