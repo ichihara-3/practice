@@ -51,13 +51,13 @@ class TestValues:
         assert parser.is_array(string) is False
 
     def test_is_object(self):
-        string = "{valid}"
+        string = '{"key": "valid"}'
         assert parser.is_object(string) is True
 
-        string = "{invalid1"
+        string = '{"key": "invalid1"'
         assert parser.is_object(string) is False
 
-        string = "invalid2}"
+        string = '"key": "invalid2"}'
         assert parser.is_object(string) is False
 
         string = "invalid3"
