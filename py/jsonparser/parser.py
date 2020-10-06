@@ -6,11 +6,38 @@ class WS:
     values = ("\x20", "\x09", "\x0a", "\x0d")
 
 
-class Number:
+class Value:
+    pass
+
+
+class Null(Value):
+    pass
+
+
+class PyTrue(Value):
+    pass
+
+
+class PyFalse(Value):
+    pass
+
+
+class Number(Value):
     pattern = re.compile(r"^-?(0|[1-9]\d*)(\.\d+)?([eE]\d+)?$", re.ASCII)
 
+    def __init__(self, line):
+        self._line = line
 
-class String:
+
+class Float(Number):
+    pass
+
+
+class Int(Number):
+    pass
+
+
+class String(Value):
     escape_map = {
         '"': '"',
         "\\": "\\",
@@ -21,6 +48,76 @@ class String:
         "r": "\r",
         "t": "\t",
     }
+    unicode_char = "u"
+
+    def __init__(self, line):
+        self._line = line
+
+
+class Array(Value):
+
+    def __init__(self, line):
+        self._line = line
+        self._contents = []
+        self._tokenize(line)
+
+    def _tokenize(self):
+        string = ""
+        escaped = False
+        for s in self._line:
+            if s == "\\" and not escaped:
+                escaped = True
+            if s == "," and escaped:
+                self._contents.append(tokeninze(s))
+            string+=s
+            if escaped:
+                escaped = False
+
+
+class Object(Value):
+
+    def __init__(self, line):
+        self._line = line
+        self._contents = []
+
+
+    def _tokenize(self):
+        string = ""
+        escaped = False
+        for s in self._line:
+            if s == "\\" and not escaped:
+                escaped = True
+            if s == "," and escaped:
+                self._contents.append(tokeninze(s))
+            string+=s
+            if escaped:
+                escaped = False
+
+
+# Object(str).to_py_object()
+# -> Object(Key:Str, Value:Object(...), Key: Str(xxx))
+
+def tokeninze(string):
+    string = trim_ws(string)
+    if is_null(string):
+        return Null()
+    if is_true(string):
+        return PyTrue()
+    if is_false(string):
+        return PyFalse()
+    if is_array(string):
+        return Array(string[1:-1])
+    if is_object(string):
+        return Object(string[1:-1])
+    if is_string(string):
+        return String(string[1:-1])
+    if is_number(string):
+        if is_float(string):
+            return Float(string)
+        else:
+            return Int(string)
+    else:
+        raise ValueError("invalid object literal: {}".format(string))
 
 
 def is_ws(char):
@@ -57,6 +154,10 @@ def is_number(string):
     return True
 
 
+def trim_ws(string):
+    return string.strip("".join(WS.values))
+
+
 def is_float(string):
     if not is_number(string):
         return False
@@ -69,7 +170,7 @@ def is_int(string):
 
 class Parser:
     def parse(self, string):
-        string = self._trim_ws(string)
+        string = trim_ws(string)
         if is_null(string):
             return None
         if is_true(string):
@@ -80,7 +181,7 @@ class Parser:
             return self._to_array(string)
         if is_object(string):
             result = {}
-            content = self._trim_ws(string[1:-1])
+            content = trim_ws(string[1:-1])
             if content == "":
                 return result
             elements = content.split(",")
@@ -98,11 +199,9 @@ class Parser:
         else:
             raise ValueError("invalid object literal: {}".format(string))
 
-    def _trim_ws(self, string):
-        return string.strip("".join(WS.values))
 
     def _to_array(self, string):
-        string = self._trim_ws(string)
+        string = trim_ws(string)
         contents = []
         element = ""
         depth = 1
@@ -123,7 +222,7 @@ class Parser:
         return list(map(self.parse, contents))
 
     def _to_string(self, string):
-        string = self._trim_ws(string)
+        string = trim_ws(string)
         line = ""
         escaped = False
         unicode_char = False
@@ -173,5 +272,6 @@ class Parser:
 
 
 if __name__ == '__main__':
+    import sys
     p = Parser()
-    print(p.parse( '{"int": 1234, "float": -1234.56e78, "str": "onetwothreefour"}'))
+    print(p.parse(sys.stdin.read()))
