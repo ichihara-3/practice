@@ -380,6 +380,16 @@ class TestParser:
 
         assert result == expected
 
+    def test_object_in_array(self):
+        p = parser.Parser()
+        string = '[{"message": "HelloWorld", "theAnswer": 42}, 10000]'
+        expected = [{"message": "HelloWorld", "theAnswer": 42}, 10000]
+
+        result = p.parse(string)
+
+        assert result == expected
+
+
     def test_invalid_literal(self):
         p = parser.Parser()
         string = "1a2b3c"
