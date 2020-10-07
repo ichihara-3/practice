@@ -102,9 +102,9 @@ class Parser:
         line = trim_ws(string[1:-1])
         if line == "":
             return result
-        in_key = False
-        key = ""
         while len(line):
+            in_key = False
+            key = ""
             # scan key
             for i, s in enumerate(line):
                 if s in WS.values and not in_key:
