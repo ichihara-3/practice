@@ -99,13 +99,66 @@ class Parser:
 
     def _to_object(self, string):
         result = {}
-        content = trim_ws(string[1:-1])
-        if content == "":
+        line = trim_ws(string[1:-1])
+        if line == "":
             return result
-        elements = content.split(",")
-        for e in elements:
-            k, v = e.split(":")
-            result[self._to_string(k)] = self.parse(v)
+        in_key = False
+        key = ""
+        while len(line):
+            # scan key
+            for i, s in enumerate(line):
+                if s in WS.values and not in_key:
+                    continue
+                if s == '"':
+                    if not in_key:
+                        in_key = True
+                    else:
+                        if i > 1 and line[i-1] != "\\":
+                            key += s
+                            break
+                if in_key:
+                    key += s
+                else:
+                    raise ValueError('unexpected Token')
+            line = line[i+1:]
+            for i, s in enumerate(line):
+                if s == ":":
+                    break
+            line = line[i+1:]
+            # scan value
+            value = ""
+            obj_depth = 0
+            array_depth = 0
+            in_str = False
+            for j, s in enumerate(line):
+                if s == '"':
+                    if not in_str:
+                        in_str = True
+                    elif in_str and  line[j-1] != "\\":
+                        in_str = False
+                if s == "[":
+                    if not in_str:
+                        array_depth += 1
+                if s == "]":
+                    if not in_str:
+                        array_depth -= 1
+                        if array_depth < 0:
+                            raise ValueError("invalid syntax: {}".format(string))
+                if s == "{":
+                    if not in_str:
+                        obj_depth += 1
+                if s == "}":
+                    if not in_str:
+                        obj_depth -= 1
+                        if obj_depth < 0:
+                            raise ValueError("invalid syntax: {}".format(string))
+                if s == ",":
+                    if not in_str and array_depth == 0 and obj_depth == 0:
+                        break
+                value += s
+            print(key, value)
+            result[self._to_string(key)] = self.parse(value)
+            line = line[j+1:]
         return result
 
 
