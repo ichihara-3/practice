@@ -156,7 +156,6 @@ class Parser:
                     if not in_str and array_depth == 0 and obj_depth == 0:
                         break
                 value += s
-            print(key, value)
             result[self._to_string(key)] = self.parse(value)
             line = line[j+1:]
         return result
@@ -164,24 +163,42 @@ class Parser:
 
     def _to_array(self, string):
         string = trim_ws(string)
-        contents = []
-        element = ""
-        depth = 1
-        for s in string[1:]:
-            if s == "[":
-                depth += 1
-            if s == "]":
-                depth -= 1
-                if depth == 0:
-                    if element:
-                        contents.append(element)
-                    break
-            if s == "," and depth == 1:
-                contents.append(element)
-                element = ""
-                continue
-            element += s
-        return list(map(self.parse, contents))
+        items = []
+        content = string [1:-1]
+        while len(content):
+            item = ""
+            array_depth = 0
+            obj_depth = 0
+            in_str = False
+            for i, s in enumerate(content):
+                if s == '"':
+                    if not in_str:
+                        in_str = True
+                    elif in_str and  content[i-1] != "\\":
+                        in_str = False
+                if s == "[":
+                    if not in_str:
+                        array_depth += 1
+                if s == "]":
+                    if not in_str:
+                        array_depth -= 1
+                        if array_depth < 0:
+                            raise ValueError("invalid syntax: {}".format(string))
+                if s == "{":
+                    if not in_str:
+                        obj_depth += 1
+                if s == "}":
+                    if not in_str:
+                        obj_depth -= 1
+                        if obj_depth < 0:
+                            raise ValueError("invalid syntax: {}".format(string))
+                if s == ",":
+                    if not in_str and array_depth == 0 and obj_depth == 0:
+                        break
+                item += s
+            items.append(item)
+            content = content[i+1:]
+        return list(map(self.parse, items))
 
     def _to_string(self, string):
         string = trim_ws(string)
