@@ -73,7 +73,6 @@ def is_int(string):
 
 
 class Parser:
-
     def parse(self, string):
         string = trim_ws(string)
         if is_null(string):
@@ -96,7 +95,6 @@ class Parser:
         else:
             raise ValueError("invalid object literal: {}".format(string))
 
-
     def _to_object(self, string):
         result = {}
         line = trim_ws(string[1:-1])
@@ -113,18 +111,18 @@ class Parser:
                     if not in_key:
                         in_key = True
                     else:
-                        if i > 1 and line[i-1] != "\\":
+                        if i > 1 and line[i - 1] != "\\":
                             key += s
                             break
                 if in_key:
                     key += s
                 else:
-                    raise ValueError('unexpected Token')
-            line = line[i+1:]
+                    raise ValueError("unexpected Token")
+            line = line[i + 1 :]
             for i, s in enumerate(line):
                 if s == ":":
                     break
-            line = line[i+1:]
+            line = line[i + 1 :]
             # scan value
             value = ""
             obj_depth = 0
@@ -134,7 +132,7 @@ class Parser:
                 if s == '"':
                     if not in_str:
                         in_str = True
-                    elif in_str and  line[j-1] != "\\":
+                    elif in_str and line[j - 1] != "\\":
                         in_str = False
                 if s == "[":
                     if not in_str:
@@ -157,14 +155,13 @@ class Parser:
                         break
                 value += s
             result[self._to_string(key)] = self.parse(value)
-            line = line[j+1:]
+            line = line[j + 1 :]
         return result
-
 
     def _to_array(self, string):
         string = trim_ws(string)
         items = []
-        content = string [1:-1]
+        content = string[1:-1]
         while len(content):
             item = ""
             array_depth = 0
@@ -174,7 +171,7 @@ class Parser:
                 if s == '"':
                     if not in_str:
                         in_str = True
-                    elif in_str and  content[i-1] != "\\":
+                    elif in_str and content[i - 1] != "\\":
                         in_str = False
                 if s == "[":
                     if not in_str:
@@ -197,7 +194,7 @@ class Parser:
                         break
                 item += s
             items.append(item)
-            content = content[i+1:]
+            content = content[i + 1 :]
         return list(map(self.parse, items))
 
     def _to_string(self, string):
@@ -250,7 +247,33 @@ class Parser:
         return line
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
+
     p = Parser()
-    print(p.parse(sys.stdin.read()))
+    result = p.parse(sys.stdin.read())
+
+    def print_with_type(obj, indent=0):
+        if isinstance(obj, dict):
+            print("{indent}{{".format(indent="  " * indent))
+            for k, v in obj.items():
+                print(
+                    "{indent}{k}:{tk}:".format(
+                        indent="  " * (indent + 1), k=repr(k), tk=type(k)
+                    )
+                )
+                print_with_type(v, indent + 2)
+            print("{indent}}}".format(indent="  " * indent))
+        elif isinstance(obj, list):
+            print("{indent}[".format(indent="  " * indent))
+            for v in obj:
+                print_with_type(v, indent + 1)
+            print("{indent}]".format(indent="  " * indent))
+        else:
+            print(
+                "{indent}{obj}:{to}".format(
+                    indent="  " * indent, obj=repr(obj), to=type(obj)
+                )
+            )
+
+    print_with_type(result)

@@ -389,7 +389,6 @@ class TestParser:
 
         assert result == expected
 
-
     def test_invalid_literal(self):
         p = parser.Parser()
         string = "1a2b3c"
