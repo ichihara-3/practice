@@ -185,11 +185,13 @@ class Parser:
     def _to_array(self, string):
         items = []
         content = trim_ws(string[1:-1])
+        has_next = False
         while len(content):
             item = ""
             array_depth = 0
             obj_depth = 0
             in_str = False
+            has_next = False
             for i, s in enumerate(content):
                 if s == String.quotation_mark:
                     if not in_str:
@@ -214,10 +216,13 @@ class Parser:
                             raise ValueError("invalid syntax: {}".format(string))
                 if s == StructualChars.value_separator:
                     if not in_str and array_depth == 0 and obj_depth == 0:
+                        has_next = True
                         break
                 item += s
             items.append(item)
             content = content[i + 1 :]
+        if has_next:
+            raise ValueError('trailing comma found: {}'.format(string))
         return list(map(self.parse, items))
 
     def _to_string(self, string):
