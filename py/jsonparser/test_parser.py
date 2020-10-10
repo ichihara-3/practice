@@ -98,6 +98,12 @@ class TestValues:
         string = "1E10.10"
         assert parser.is_number(string) is False
 
+        string = "1E+10"
+        assert parser.is_number(string) is True
+
+        string = "1E10.10"
+        assert parser.is_number(string) is False
+
         string = "1E"
         assert parser.is_number(string) is False
 
@@ -153,6 +159,18 @@ class TestParser:
         string = "\t\r\n 1 \t\r\n "
         expected = 1
 
+        result = p.parse(string)
+        assert result == expected
+
+    def test_float(self):
+        p = parser.Parser()
+        string = "1.5"
+        expected = 1.5
+        result = p.parse(string)
+        assert result == expected
+
+        string = "1.5e+10"
+        expected = 1.5e+10
         result = p.parse(string)
         assert result == expected
 
