@@ -134,8 +134,9 @@ class Parser:
                     if not in_key:
                         in_key = True
                     else:
-                        if i > 1 and line[i - 1] != String.escape:
+                        if i > 0 and line[i - 1] != String.escape:
                             key += s
+                            in_key = False
                             break
                 if in_key:
                     key += s

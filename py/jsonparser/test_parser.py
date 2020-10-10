@@ -439,6 +439,15 @@ class TestParser:
 
         assert result == expected
 
+    def test_object_empty_key(self):
+        p = parser.Parser()
+        string = '{"": 10}'
+        expected = {"": 10}
+
+        result =p.parse(string)
+        assert result == expected
+
+
     def test_complex_text(self):
         p = parser.Parser()
         string = dedent(
