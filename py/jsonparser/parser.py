@@ -123,9 +123,11 @@ class Parser:
         line = trim_ws(string[1:-1])
         if line == "":
             return result
+        has_next = False
         while len(line):
             in_key = False
             key = ""
+            has_next = False
             # scan key
             for i, s in enumerate(line):
                 if s in WS.values and not in_key:
@@ -176,10 +178,13 @@ class Parser:
                             raise ValueError("invalid syntax: {}".format(string))
                 if s == StructualChars.value_separator:
                     if not in_str and array_depth == 0 and obj_depth == 0:
+                        has_next = True
                         break
                 value += s
             result[self._to_string(key)] = self.parse(value)
             line = line[j + 1 :]
+        if has_next:
+            raise ValueError('trailing comma found: {}'.format(string))
         return result
 
     def _to_array(self, string):

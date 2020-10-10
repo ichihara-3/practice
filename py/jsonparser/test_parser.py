@@ -543,3 +543,7 @@ class TestParser:
         string = "[1,]"
         with pytest.raises(ValueError):
             p.parse(string)
+
+        string = '{"x": 123,}'
+        with pytest.raises(ValueError):
+            p.parse(string)
