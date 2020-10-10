@@ -3,7 +3,22 @@ import re
 
 class WS:
 
-    values = ("\x20", "\x09", "\x0a", "\x0d")
+    values = (
+        "\x20",  # スペース
+        "\x09",  # 平行タブ
+        "\x0a",  # 改行または埋め込み改行(LF)
+        "\x0d",  # 復帰改行(CR)
+    )
+
+
+class StructualChars:
+
+    begin_array = "\x5b"  # 左角括弧 [
+    begin_object = "\x7b"  # 左中括弧 {
+    end_array = "\x5d"  # 右角括弧 ]
+    end_object = "\x7d"  # 右中括弧 ]
+    name_separator = "\x3a"  # コロン   :
+    value_separator = "\x2c"  # コンマ   ,
 
 
 class Number:
@@ -21,7 +36,9 @@ class String:
         "r": "\r",
         "t": "\t",
     }
+    escape = "\\"
     unicode_char = "u"
+    quotation_mark = '"'
 
 
 def is_ws(char):
@@ -41,15 +58,21 @@ def is_false(string):
 
 
 def is_string(string):
-    return string.startswith('"') and string.endswith('"')
+    return string.startswith(String.quotation_mark) and string.endswith(
+        String.quotation_mark
+    )
 
 
 def is_array(string):
-    return string.startswith("[") and string.endswith("]")
+    return string.startswith(StructualChars.begin_array) and string.endswith(
+        StructualChars.end_array
+    )
 
 
 def is_object(string):
-    return string.startswith("{") and string.endswith("}")
+    return string.startswith(StructualChars.begin_object) and string.endswith(
+        StructualChars.end_object
+    )
 
 
 def is_number(string):
@@ -107,11 +130,11 @@ class Parser:
             for i, s in enumerate(line):
                 if s in WS.values and not in_key:
                     continue
-                if s == '"':
+                if s == String.quotation_mark:
                     if not in_key:
                         in_key = True
                     else:
-                        if i > 1 and line[i - 1] != "\\":
+                        if i > 1 and line[i - 1] != String.escape:
                             key += s
                             break
                 if in_key:
@@ -120,7 +143,7 @@ class Parser:
                     raise ValueError("unexpected Token")
             line = line[i + 1 :]
             for i, s in enumerate(line):
-                if s == ":":
+                if s == StructualChars.name_separator:
                     break
             line = line[i + 1 :]
             # scan value
@@ -129,28 +152,28 @@ class Parser:
             array_depth = 0
             in_str = False
             for j, s in enumerate(line):
-                if s == '"':
+                if s == String.quotation_mark:
                     if not in_str:
                         in_str = True
-                    elif in_str and line[j - 1] != "\\":
+                    elif in_str and line[j - 1] != String.escape:
                         in_str = False
-                if s == "[":
+                if s == StructualChars.begin_array:
                     if not in_str:
                         array_depth += 1
-                if s == "]":
+                if s == StructualChars.end_array:
                     if not in_str:
                         array_depth -= 1
                         if array_depth < 0:
                             raise ValueError("invalid syntax: {}".format(string))
-                if s == "{":
+                if s == StructualChars.begin_object:
                     if not in_str:
                         obj_depth += 1
-                if s == "}":
+                if s == StructualChars.end_object:
                     if not in_str:
                         obj_depth -= 1
                         if obj_depth < 0:
                             raise ValueError("invalid syntax: {}".format(string))
-                if s == ",":
+                if s == StructualChars.value_separator:
                     if not in_str and array_depth == 0 and obj_depth == 0:
                         break
                 value += s
@@ -159,37 +182,36 @@ class Parser:
         return result
 
     def _to_array(self, string):
-        string = trim_ws(string)
         items = []
-        content = string[1:-1]
+        content = trim_ws(string[1:-1])
         while len(content):
             item = ""
             array_depth = 0
             obj_depth = 0
             in_str = False
             for i, s in enumerate(content):
-                if s == '"':
+                if s == String.quotation_mark:
                     if not in_str:
                         in_str = True
-                    elif in_str and content[i - 1] != "\\":
+                    elif in_str and content[i - 1] != String.escape:
                         in_str = False
-                if s == "[":
+                if s == StructualChars.begin_array:
                     if not in_str:
                         array_depth += 1
-                if s == "]":
+                if s == StructualChars.end_array:
                     if not in_str:
                         array_depth -= 1
                         if array_depth < 0:
                             raise ValueError("invalid syntax: {}".format(string))
-                if s == "{":
+                if s == StructualChars.begin_object:
                     if not in_str:
                         obj_depth += 1
-                if s == "}":
+                if s == StructualChars.end_object:
                     if not in_str:
                         obj_depth -= 1
                         if obj_depth < 0:
                             raise ValueError("invalid syntax: {}".format(string))
-                if s == ",":
+                if s == StructualChars.value_separator:
                     if not in_str and array_depth == 0 and obj_depth == 0:
                         break
                 item += s
@@ -204,17 +226,17 @@ class Parser:
         unicode_char = False
         unicode_line = ""
         for s in string[1:]:
-            if s == "\\" and not escaped:
+            if s == String.escape and not escaped:
                 escaped = True
                 continue
-            if s == '"' and not escaped:
+            if s == String.quotation_mark and not escaped:
                 break
             if escaped and not unicode_char:
                 if s in String.escape_map:
                     line += String.escape_map[s]
                     escaped = False
                     continue
-                elif s == "u":
+                elif s == String.unicode_char:
                     unicode_char = True
                     unicode_line += "\\u"
                     continue

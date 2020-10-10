@@ -1,3 +1,4 @@
+from textwrap import dedent
 import parser
 import pytest
 
@@ -387,6 +388,91 @@ class TestParser:
 
         result = p.parse(string)
 
+        assert result == expected
+
+    def test_objects_in_array(self):
+        p = parser.Parser()
+        string = """
+        [
+          {
+            "message": "HelloWorld",
+            "theAnswer": 42
+          }
+          ,
+          {
+            "message": "Goodbye,Space",
+            "address": {
+              "zipnumber": "1002000",
+              "addr1": "XXX",
+              "addr2": "YYY"
+            }
+          }
+        ]
+        """
+        expected = [
+            {"message": "HelloWorld", "theAnswer": 42},
+            {
+                "message": "Goodbye,Space",
+                "address": {"zipnumber": "1002000", "addr1": "XXX", "addr2": "YYY"},
+            },
+        ]
+
+        result = p.parse(string)
+
+        assert result == expected
+
+    def test_complex_text(self):
+        p = parser.Parser()
+        string = dedent(
+            """\
+        [
+          {
+            "precision": "zip",
+            "Latitude":  37.7668,
+            "Longitude": -122.3959,
+            "Address":   "",
+            "City":      "SAN FRANCISCO",
+            "State":     "CA",
+            "Zip":       "94107",
+            "Country":   "US"
+          },
+          {
+            "precision": "zip",
+            "Latitude":  37.371991,
+            "Longitude": -122.026020,
+            "Address":   "",
+            "City":      "SUNNYVALE",
+            "State":     "CA",
+            "Zip":       "94085",
+            "Country":   "US"
+          }
+        ]
+        """
+        )
+        expected = [
+            {
+                "precision": "zip",
+                "Latitude": 37.7668,
+                "Longitude": -122.3959,
+                "Address": "",
+                "City": "SAN FRANCISCO",
+                "State": "CA",
+                "Zip": "94107",
+                "Country": "US",
+            },
+            {
+                "precision": "zip",
+                "Latitude": 37.371991,
+                "Longitude": -122.026020,
+                "Address": "",
+                "City": "SUNNYVALE",
+                "State": "CA",
+                "Zip": "94085",
+                "Country": "US",
+            },
+        ]
+
+        result = p.parse(string)
         assert result == expected
 
     def test_invalid_literal(self):
