@@ -37,46 +37,42 @@ class String:
         "t": "\t",
     }
     controll_chars = (
-        '\x00',
-        '\x01',
-        '\x02',
-        '\x03',
-        '\x04',
-        '\x05',
-        '\x06',
-        '\x07',
-        '\x08',
-        '\x09',
-        '\x0a',
-        '\x0b',
-        '\x0c',
-        '\x0d',
-        '\x0e',
-        '\x0f',
-        '\x10',
-        '\x11',
-        '\x12',
-        '\x13',
-        '\x14',
-        '\x15',
-        '\x16',
-        '\x17',
-        '\x18',
-        '\x19',
-        '\x1a',
-        '\x1b',
-        '\x1c',
-        '\x1d',
-        '\x1e',
-        '\x1f',
+        "\x00",
+        "\x01",
+        "\x02",
+        "\x03",
+        "\x04",
+        "\x05",
+        "\x06",
+        "\x07",
+        "\x08",
+        "\x09",
+        "\x0a",
+        "\x0b",
+        "\x0c",
+        "\x0d",
+        "\x0e",
+        "\x0f",
+        "\x10",
+        "\x11",
+        "\x12",
+        "\x13",
+        "\x14",
+        "\x15",
+        "\x16",
+        "\x17",
+        "\x18",
+        "\x19",
+        "\x1a",
+        "\x1b",
+        "\x1c",
+        "\x1d",
+        "\x1e",
+        "\x1f",
     )
     escape = "\\"
     unicode_char = "u"
     quotation_mark = '"'
-
-
-def is_ws(char):
-    return char in Ws.values
 
 
 def is_null(string):
@@ -218,7 +214,7 @@ class Parser:
             result[self._to_string(key)] = self.parse(value)
             line = line[j + 1 :]
         if has_next:
-            raise ValueError('trailing comma found: {}'.format(string))
+            raise ValueError("trailing comma found: {}".format(string))
         return result
 
     def _to_array(self, string):
@@ -261,7 +257,7 @@ class Parser:
             items.append(item)
             content = content[i + 1 :]
         if has_next:
-            raise ValueError('trailing comma found: {}'.format(string))
+            raise ValueError("trailing comma found: {}".format(string))
         return list(map(self.parse, items))
 
     def _to_string(self, string):
@@ -272,7 +268,11 @@ class Parser:
         unicode_line = ""
         for s in string[1:]:
             if s in String.controll_chars:
-                raise ValueError("controll chars not allowed to place in the string:{}".format(repr(s)))
+                raise ValueError(
+                    "controll chars not allowed to place in the string:{}".format(
+                        repr(s)
+                    )
+                )
             if s == String.escape and not escaped:
                 escaped = True
                 continue
