@@ -170,7 +170,7 @@ class TestParser:
         assert result == expected
 
         string = "1.5e+10"
-        expected = 1.5e+10
+        expected = 1.5e10
         result = p.parse(string)
         assert result == expected
 
@@ -211,13 +211,23 @@ class TestParser:
         assert result == expected
 
     def test_str_with_escape(self):
+
         p = parser.Parser()
-        string = r'"\" \\ \/ \b \f \n \r \t \uFFFF\u1234"'
-        expected = '" \\ / \b \f \n \r \t \uFFFF\u1234'
+        chars = {
+            '"\\\x22"': '"',  # "     引用符                    U+0022
+            '"\\\x5C"': "\\",  # \     バックスラッシュ          U+005C
+            '"\\\x2F"': "/",  # /     スラッシュ                U+002F
+            '"\\\x62"': "\b",  # b     バックスペース            U+0008
+            '"\\\x66"': "\f",  # f     改ページ(Form feed)       U+000C
+            '"\\\x6E"': "\n",  # n     改行(Line feed)           U+000A
+            '"\\\x72"': "\r",  # r     復帰改行(Carriage return) U+000D
+            '"\\\x74"': "\t",  # t     タブ                      U+0009
+            '"\\\x75AAAA"': "\uAAAA",  # 4HEXDIG} # uXXXX                 U+XXXX
+        }
+        for char, expected in chars.items():
+            result = p.parse(char)
 
-        result = p.parse(string)
-
-        assert result == expected
+            assert result == expected
 
     def test_empty_str(self):
         p = parser.Parser()
@@ -444,9 +454,8 @@ class TestParser:
         string = '{"": 10}'
         expected = {"": 10}
 
-        result =p.parse(string)
+        result = p.parse(string)
         assert result == expected
-
 
     def test_complex_text(self):
         p = parser.Parser()
