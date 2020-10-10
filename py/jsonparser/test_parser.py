@@ -222,7 +222,7 @@ class TestParser:
             '"\\\x6E"': "\n",  # n     改行(Line feed)           U+000A
             '"\\\x72"': "\r",  # r     復帰改行(Carriage return) U+000D
             '"\\\x74"': "\t",  # t     タブ                      U+0009
-            '"\\\x75AAAA"': "\uAAAA",  # 4HEXDIG} # uXXXX                 U+XXXX
+            '"\\\x75AAAA"': "\uAAAA",  # uXXXX                 U+XXXX
         }
         for char, expected in chars.items():
             result = p.parse(char)
@@ -529,6 +529,12 @@ class TestParser:
 
         p = parser.Parser()
         string = r'"\"'
+        with pytest.raises(ValueError):
+            p.parse(string)
+
+        p = parser.Parser()
+        string = '''"
+        "'''
         with pytest.raises(ValueError):
             p.parse(string)
 
