@@ -126,147 +126,136 @@ def is_int(string):
 
 
 class Parser:
-    def parse(self, string):
-        string = trim_ws(string)
-        if is_null(string):
-            return None
-        if is_true(string):
-            return True
-        if is_false(string):
-            return False
-        if is_array(string):
-            return self._to_array(string)
-        if is_object(string):
-            return self._to_object(string)
-        if is_string(string):
-            return self._to_string(string)
-        if is_number(string):
-            if is_float(string):
-                return float(string)
-            else:
-                return int(string)
-        else:
-            raise ValueError("invalid object literal: {}".format(string))
 
-    def _to_object(self, string):
+    def parse(self, string):
+        res, pos = self._parse(string)
+        if len(trim_ws(string[pos:])):
+            raise ValueError('unexpected trailing characters: {}'.format(string[pos:]))
+        return res
+
+    def _parse(self, string, pos=0):
+        while pos < len(string):
+            char = string[pos]
+            if char in WS.values:
+                pos += 1
+            else:
+                break
+        char = string[pos]
+        if char == 'n' and string[pos:pos+len('null')] == 'null':
+            pos += len('null')
+            return None, pos
+        if char == 't' and string[pos:pos+len('true')] == 'true':
+            pos += len('true')
+            return True, pos
+        if char == 'f' and string[pos:pos+len('false')] == 'false':
+            pos += len('false')
+            return False, pos
+        if char == '"':
+            result, pos =  self._parse_string(string, pos)
+            return result, pos
+        if char == '[':
+            result, pos = self._parse_array(string, pos)
+            return result, pos
+        if char == '{':
+            result, pos = self._parse_object(string, pos)
+            return result, pos
+        result, pos = self._parse_number(string, pos)
+        return result, pos
+
+    def _parse_number(self, string, pos):
+        num = None
+        nonumber = 0
+        for i in range(1, len(string) - pos+1):
+            if is_number(string[pos:pos+i]):
+                num = string[pos:pos+i]
+                nonumber = 0
+            else:
+                nonumber += 1
+            if nonumber >= 2:
+                break
+        if num is None:
+            raise ValueError('unexpected characters')
+        pos += len(num)
+        if is_float(num):
+            return float(num), pos
+        else:
+            return int(num), pos
+
+
+
+    def _parse_object(self, string, pos):
+        if string[pos] != StructualChars.begin_object:
+            raise ValueError('not an object')
+        pos += 1
         result = {}
-        line = trim_ws(string[1:-1])
-        if line == "":
-            return result
         has_next = False
-        while len(line):
-            in_key = False
-            key = ""
+        while string[pos] != StructualChars.end_object:
+            has_key = False
             has_next = False
             # scan key
-            for i, s in enumerate(line):
-                if s in WS.values and not in_key:
+            while not has_key:
+                s = string[pos]
+                if s in WS.values:
+                    pos += 1
                     continue
-                if s == String.quotation_mark:
-                    if not in_key:
-                        in_key = True
-                    else:
-                        if i > 0 and line[i - 1] != String.escape:
-                            key += s
-                            in_key = False
-                            break
-                if in_key:
-                    key += s
+                elif s == String.quotation_mark:
+                    key, pos = self._parse_string(string, pos)
+                    has_key = True
                 else:
                     raise ValueError("unexpected Token")
-            line = line[i + 1 :]
-            for i, s in enumerate(line):
-                if s == StructualChars.name_separator:
-                    break
-            line = line[i + 1 :]
+            while string[pos] != StructualChars.name_separator:
+                pos += 1
+            pos += 1
             # scan value
-            value = ""
-            obj_depth = 0
-            array_depth = 0
-            in_str = False
-            for j, s in enumerate(line):
-                if s == String.quotation_mark:
-                    if not in_str:
-                        in_str = True
-                    elif in_str and line[j - 1] != String.escape:
-                        in_str = False
-                if s == StructualChars.begin_array:
-                    if not in_str:
-                        array_depth += 1
-                if s == StructualChars.end_array:
-                    if not in_str:
-                        array_depth -= 1
-                        if array_depth < 0:
-                            raise ValueError("invalid syntax: {}".format(string))
-                if s == StructualChars.begin_object:
-                    if not in_str:
-                        obj_depth += 1
-                if s == StructualChars.end_object:
-                    if not in_str:
-                        obj_depth -= 1
-                        if obj_depth < 0:
-                            raise ValueError("invalid syntax: {}".format(string))
-                if s == StructualChars.value_separator:
-                    if not in_str and array_depth == 0 and obj_depth == 0:
-                        has_next = True
-                        break
-                value += s
-            result[self._to_string(key)] = self.parse(value)
-            line = line[j + 1 :]
+            value, pos = self._parse(string, pos)
+            result[key] = value
+            while string[pos] != StructualChars.value_separator and string[pos] != StructualChars.end_object:
+                pos += 1
+            if string[pos] == StructualChars.value_separator:
+                pos += 1
+                has_next = True
         if has_next:
-            raise ValueError("trailing comma found: {}".format(string))
-        return result
+            raise ValueError('unexpected comma')
+        pos += 1
+        return result, pos
 
-    def _to_array(self, string):
+    def _parse_array(self, string, pos):
+        if string[pos] != StructualChars.begin_array:
+            raise ValueError('not an object')
+        pos += 1
         items = []
-        content = trim_ws(string[1:-1])
         has_next = False
-        while len(content):
-            item = ""
-            array_depth = 0
-            obj_depth = 0
-            in_str = False
+        while string[pos] != StructualChars.end_array:
             has_next = False
-            for i, s in enumerate(content):
-                if s == String.quotation_mark:
-                    if not in_str:
-                        in_str = True
-                    elif in_str and content[i - 1] != String.escape:
-                        in_str = False
-                if s == StructualChars.begin_array:
-                    if not in_str:
-                        array_depth += 1
-                if s == StructualChars.end_array:
-                    if not in_str:
-                        array_depth -= 1
-                        if array_depth < 0:
-                            raise ValueError("invalid syntax: {}".format(string))
-                if s == StructualChars.begin_object:
-                    if not in_str:
-                        obj_depth += 1
-                if s == StructualChars.end_object:
-                    if not in_str:
-                        obj_depth -= 1
-                        if obj_depth < 0:
-                            raise ValueError("invalid syntax: {}".format(string))
-                if s == StructualChars.value_separator:
-                    if not in_str and array_depth == 0 and obj_depth == 0:
-                        has_next = True
-                        break
-                item += s
+            item, pos = self._parse(string, pos)
             items.append(item)
-            content = content[i + 1 :]
+            while string[pos] != StructualChars.value_separator and string[pos] != StructualChars.end_array:
+                pos += 1
+            if pos >= len(string):
+                raise ValueError('unexpected end of the text')
+            if string[pos] == StructualChars.value_separator:
+                pos += 1
+                has_next = True
+            if pos >= len(string):
+                raise ValueError('unexpected end of the text')
         if has_next:
-            raise ValueError("trailing comma found: {}".format(string))
-        return list(map(self.parse, items))
+            raise ValueError("trailing comma found")
+        pos += 1
+        return items, pos
 
-    def _to_string(self, string):
-        string = trim_ws(string)
-        line = ""
+    def _parse_string(self, string, pos):
+        if string[pos] != String.quotation_mark:
+            raise ValueError('not a string')
+        pos += 1
         escaped = False
         unicode_char = False
+        line = ""
         unicode_line = ""
-        for s in string[1:]:
+        while string[pos] != String.quotation_mark or escaped:
+            s = string[pos]
+            pos += 1
+            if pos >= len(string):
+                raise ValueError('EOF while scanning string')
             if s in String.controll_chars:
                 raise ValueError(
                     "controll chars not allowed to place in the string:{}".format(
@@ -276,8 +265,6 @@ class Parser:
             if s == String.escape and not escaped:
                 escaped = True
                 continue
-            if s == String.quotation_mark and not escaped:
-                break
             if escaped and not unicode_char:
                 if s in String.escape_map:
                     line += String.escape_map[s]
@@ -307,13 +294,8 @@ class Parser:
                     escaped = False
                 continue
             line += s
-        else:
-            raise ValueError("unexpected end of line while scanning: {}".format(string))
-        if escaped:
-            raise ValueError(
-                "unexpected end of line while processing escape: {}".format(string)
-            )
-        return line
+        pos += 1
+        return line, pos
 
 
 if __name__ == "__main__":
