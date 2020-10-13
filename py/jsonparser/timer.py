@@ -46,3 +46,9 @@ def load_x_times(string, x):
 load_x_times = timer(load_x_times)
 print(parse_x_times(string, 10000))
 print(load_x_times(string, 10000))
+print(load_x_times(string, 10000))
+print(parse_x_times(string, 10000))
+
+import cProfile
+
+cProfile.run('parse_x_times(string, 10000)')
