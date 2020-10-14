@@ -44,11 +44,23 @@ def load_x_times(string, x):
         json.loads(string)
 
 load_x_times = timer(load_x_times)
-print(parse_x_times(string, 10000))
-print(load_x_times(string, 10000))
-print(load_x_times(string, 10000))
-print(parse_x_times(string, 10000))
 
 import cProfile
 
 cProfile.run('parse_x_times(string, 10000)')
+
+from json.scanner import py_make_scanner
+from json.decoder import py_scanstring
+from json.decoder import JSONDecoder
+
+decoder = JSONDecoder()
+decoder.parse_string = py_scanstring
+decoder.scan_once = py_make_scanner(decoder)
+
+
+@timer
+def decode_x_times(string, x):
+    for _ in range(x):
+        decoder.decode(string)
+
+cProfile.run('decode_x_times(string, 10000)')
