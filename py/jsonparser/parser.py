@@ -70,6 +70,7 @@ class String:
         "\x1e",
         "\x1f",
     )
+    chunk = re.compile(r'(.*?)(["\\\x00-\x1f])')
     escape = "\\"
     unicode_char = "u"
     quotation_mark = '"'
@@ -247,13 +248,17 @@ class Parser:
         if string[pos] != String.quotation_mark:
             raise ValueError('not a string')
         pos += 1
-        escaped = False
-        unicode_char = False
         line = ""
         unicode_line = ""
-        while string[pos] != String.quotation_mark or escaped:
-            s = string[pos]
-            pos += 1
+        while True:
+            m = String.chunk.match(string[pos:])
+            if m is None:
+                raise ValueError('unterminated string')
+            data, s = m.groups()
+            line += data
+            pos += m.end()
+            if s == String.quotation_mark:
+                break
             if pos >= len(string):
                 raise ValueError('EOF while scanning string')
             if s in String.controll_chars:
@@ -262,39 +267,36 @@ class Parser:
                         repr(s)
                     )
                 )
-            if s == String.escape and not escaped:
-                escaped = True
-                continue
-            if escaped and not unicode_char:
+            if s == String.escape:
+                s = string[pos]
                 if s in String.escape_map:
                     line += String.escape_map[s]
-                    escaped = False
+                    pos +=1
                     continue
                 elif s == String.unicode_char:
-                    unicode_char = True
                     unicode_line += "\\u"
-                    continue
+                    pos +=1
                 else:
                     raise ValueError("non supported escape sequence: {}".format(string))
-            if unicode_char:
-                ordinal = ord(s)
-                if 48 <= ordinal <= 57 or 65 <= ordinal <= 70 or 97 <= ordinal <= 102:
-                    unicode_line += s
-                else:
-                    raise ValueError(
-                        "unexpected character while processing escape: {}".format(
-                            string
-                        )
-                    )
-                if len(unicode_line) == 6:
+                if unicode_line:
+                    hexes = string[pos:pos+4]
+                    if len(hexes) < 4:
+                        raise ValueError("non supported unicode line")
+                    pos += 4
+                    for s in hexes:
+                        ordinal = ord(s)
+                        if 48 <= ordinal <= 57 or 65 <= ordinal <= 70 or 97 <= ordinal <= 102:
+                            unicode_line += s
+                        else:
+                            raise ValueError(
+                                "unexpected character while processing escape: {}".format(
+                                    string
+                                )
+                            )
                     char = eval('"{}"'.format(unicode_line))
                     line += char
                     unicode_line = ""
-                    unicode_char = False
-                    escaped = False
-                continue
-            line += s
-        pos += 1
+                    continue
         return line, pos
 
 
