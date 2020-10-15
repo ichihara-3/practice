@@ -51,16 +51,17 @@ cProfile.run('parse_x_times(string, 10000)')
 
 from json.scanner import py_make_scanner
 from json.decoder import py_scanstring
-from json.decoder import JSONDecoder
+from json import decoder
 
-decoder = JSONDecoder()
-decoder.parse_string = py_scanstring
-decoder.scan_once = py_make_scanner(decoder)
+decoder.scanstring = py_scanstring
+dec = decoder.JSONDecoder()
+dec.parse_string = py_scanstring
+dec.scan_once = py_make_scanner(dec)
 
 
 @timer
 def decode_x_times(string, x):
     for _ in range(x):
-        decoder.decode(string)
+        dec.decode(string)
 
 cProfile.run('decode_x_times(string, 10000)')
