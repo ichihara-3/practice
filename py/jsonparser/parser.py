@@ -107,7 +107,10 @@ def is_object(string):
 
 
 def is_number(string):
-    if Number.pattern.match(string) is None:
+    m = Number.pattern.match(string)
+    if m is None:
+        return False
+    if string[m.end():]:
         return False
     return True
 
