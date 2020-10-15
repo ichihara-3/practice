@@ -486,6 +486,11 @@ class TestParser:
         with pytest.raises(ValueError):
             p.parse(string)
 
+        p = parser.Parser()
+        string = '{"1": "one" two}'
+        with pytest.raises(ValueError):
+            p.parse(string)
+
     def test_trailing_comma(self):
         p = parser.Parser()
         string = "[1,]"

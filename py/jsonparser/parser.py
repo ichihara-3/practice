@@ -170,6 +170,8 @@ class Parser:
             value, pos = self._parse(string, pos)
             result[key] = value
             while string[pos] != StructualChars.value_separator and string[pos] != StructualChars.end_object:
+                if string[pos] not in WS.values:
+                    raise ValueError('unexpected token {}: expected ,'.format(string[pos]))
                 pos += 1
             if string[pos] == StructualChars.value_separator:
                 pos += 1
