@@ -22,7 +22,7 @@ class StructualChars:
 
 
 class Number:
-    pattern = re.compile(r"^-?(0|[1-9]\d*)(\.\d+)?([eE][-+]?\d+)?$", re.ASCII)
+    pattern = re.compile(r"-?(0|[1-9]\d*)(\.\d+)?([eE][-+]?\d+)?", re.ASCII)
 
 
 class String:
@@ -164,19 +164,11 @@ class Parser:
         return result, pos
 
     def _parse_number(self, string, pos):
-        num = None
-        nonumber = 0
-        for i in range(1, len(string) - pos+1):
-            if is_number(string[pos:pos+i]):
-                num = string[pos:pos+i]
-                nonumber = 0
-            else:
-                nonumber += 1
-            if nonumber >= 2:
-                break
-        if num is None:
-            raise ValueError('unexpected characters')
-        pos += len(num)
+        m = Number.pattern.match(string[pos:])
+        if not m:
+            raise ValueError('not a number')
+        num = m.group(0)
+        pos += m.end()
         if is_float(num):
             return float(num), pos
         else:
