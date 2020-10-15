@@ -477,6 +477,11 @@ class TestParser:
             p.parse(string)
 
         p = parser.Parser()
+        string = "[2.]"
+        with pytest.raises(ValueError):
+            p.parse(string)
+
+        p = parser.Parser()
         string = "{1:"
         with pytest.raises(ValueError):
             p.parse(string)
