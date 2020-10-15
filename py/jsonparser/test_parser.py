@@ -4,65 +4,6 @@ import pytest
 
 
 class TestValues:
-    def test_is_null(self):
-        string = "null"
-        assert parser.is_null(string) is True
-
-        string = "true"
-        assert parser.is_null(string) is False
-
-    def test_is_true(self):
-        string = "true"
-        assert parser.is_true(string) is True
-
-        string = "false"
-        assert parser.is_true(string) is False
-
-    def test_is_false(self):
-        string = "false"
-        assert parser.is_false(string) is True
-
-        string = "true"
-        assert parser.is_false(string) is False
-
-    def test_is_string(self):
-        string = '"valid"'
-        assert parser.is_string(string) is True
-
-        string = '"invalid1'
-        assert parser.is_string(string) is False
-
-        string = 'invalid2"'
-        assert parser.is_string(string) is False
-
-        string = "invalid3"
-        assert parser.is_string(string) is False
-
-    def test_is_array(self):
-        string = "[valid]"
-        assert parser.is_array(string) is True
-
-        string = "[invalid1"
-        assert parser.is_array(string) is False
-
-        string = "invalid2]"
-        assert parser.is_array(string) is False
-
-        string = "invalid3"
-        assert parser.is_array(string) is False
-
-    def test_is_object(self):
-        string = '{"key": "valid"}'
-        assert parser.is_object(string) is True
-
-        string = '{"key": "invalid1"'
-        assert parser.is_object(string) is False
-
-        string = '"key": "invalid2"}'
-        assert parser.is_object(string) is False
-
-        string = "invalid3"
-        assert parser.is_object(string) is False
 
     def test_is_number(self):
         string = "1"
@@ -128,19 +69,6 @@ class TestValues:
 
         string = '"xxxx"'
         assert parser.is_float(string) is False
-
-    def test_is_int(self):
-        string = "10"
-        assert parser.is_int(string) is True
-
-        string = "-100"
-        assert parser.is_int(string) is True
-
-        string = "10.5"
-        assert parser.is_int(string) is False
-
-        string = '"xxxx"'
-        assert parser.is_int(string) is False
 
 
 class TestParser:

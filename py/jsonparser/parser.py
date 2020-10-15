@@ -76,36 +76,6 @@ class String:
     quotation_mark = '"'
 
 
-def is_null(string):
-    return string == "null"
-
-
-def is_true(string):
-    return string == "true"
-
-
-def is_false(string):
-    return string == "false"
-
-
-def is_string(string):
-    return string.startswith(String.quotation_mark) and string.endswith(
-        String.quotation_mark
-    )
-
-
-def is_array(string):
-    return string.startswith(StructualChars.begin_array) and string.endswith(
-        StructualChars.end_array
-    )
-
-
-def is_object(string):
-    return string.startswith(StructualChars.begin_object) and string.endswith(
-        StructualChars.end_object
-    )
-
-
 def is_number(string):
     m = Number.pattern.match(string)
     if m is None:
@@ -123,10 +93,6 @@ def is_float(string):
     if not is_number(string):
         return False
     return "." in string or "e" in string or "E" in string
-
-
-def is_int(string):
-    return is_number(string) and not is_float(string)
 
 
 class Parser:
