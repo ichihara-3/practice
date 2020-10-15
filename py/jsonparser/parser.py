@@ -22,7 +22,7 @@ class StructualChars:
 
 
 class Number:
-    pattern = re.compile(r"-?(0|[1-9]\d*)(\.\d+)?([eE][-+]?\d+)?", re.ASCII)
+    pattern = re.compile(r"(-?(?:0|[1-9]\d*))(\.\d+)?([eE][-+]?\d+)?", re.ASCII)
 
 
 class String:
@@ -143,8 +143,6 @@ class Parser:
         else:
             return int(num), pos
 
-
-
     def _parse_object(self, string, pos):
         if string[pos] != StructualChars.begin_object:
             raise ValueError('not an object')
@@ -192,6 +190,8 @@ class Parser:
             item, pos = self._parse(string, pos)
             items.append(item)
             while string[pos] != StructualChars.value_separator and string[pos] != StructualChars.end_array:
+                if string[pos] not in WS.values:
+                    raise ValueError('unexpected token {}: expected ,'.format(string[pos]))
                 pos += 1
             if pos >= len(string):
                 raise ValueError('unexpected end of the text')
