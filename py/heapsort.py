@@ -3,9 +3,10 @@ import sys
 
 sys.setrecursionlimit(10000000)
 
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('filename')
+    parser.add_argument("filename")
 
     args = parser.parse_args()
 
@@ -15,54 +16,65 @@ def main():
             try:
                 data.extend(list(map(int, line.split())))
             except ValueError as e:
-                print('入力データが不正です')
-                print('-------- error情報 --------')
+                print("入力データが不正です")
+                print("-------- error情報 --------")
                 print(e.with_traceback(sys.exc_info()[2]))
                 sys.exit(1)
 
     output = []
-    for x in heapsort(data):
+    heapsort(data)
+    for x in data:
         output.append(str(x))
         if len(output) == 10:
-            print(' '.join(output))
+            print(" ".join(output))
             output = []
     if output:
-        print(' '.join(output))
-
-
+        print(" ".join(output))
 
 
 def heapsort(data):
-    while len(data):
-        _heapsort(data, (len(data))//2-1)
-        yield data[0]
-        data= data[1:]
-
-
-def _heapsort(data, idx):
-    if idx < 0:
+    if not data:
         return
-    downheap(data, idx)
-    if idx == 0:
-        return
-    _heapsort(data, idx - 1)
+    for i in range(len(data)):
+        upheap(data, i)
+    for j in range(len(data) - 1, 0, -1):
+        swap(data, 0, j)
+        downheap(data, j)
 
 
-def downheap(data, idx):
-    left = 2 * idx + 1
-    right = 2 * idx + 2
-    if left >= len(data):
-        return
-    if right < len(data) and data[right] < data[left]:
-        swap(data, left, right)
-    if data[idx] > data[left]:
-        swap(data, idx, left)
+def upheap(data, n):
+    while n > 0:
+        parent = (n - 1) // 2
+        if data[parent] < data[n]:
+            swap(data, parent, n)
+            n = parent
+        else:
+            break
 
 
-def swap(array, x, y):
-    array[x], array[y] = array[y], array[x]
+def downheap(data, n):
+    now = 0
+    left = 2 * now + 1
+    right = 2 * now + 2
+    target = 0
+    while left < n:
+        if data[now] < data[left]:
+            target = left
+        if right < n and data[left] < data[right]:
+            target = right
+        if target:
+            swap(data, now, target)
+            now = target
+            left = 2 * now + 1
+            right = 2 * now + 2
+            target = 0
+        else:
+            break
 
 
+def swap(data, x, y):
+    data[x], data[y] = data[y], data[x]
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
