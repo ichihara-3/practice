@@ -10,7 +10,6 @@ import traceback
 __version__ = "0.0.1"
 
 
-
 readline.parse_and_bind("tab: complete")
 
 
