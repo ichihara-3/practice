@@ -20,13 +20,26 @@ def main():
                 print(e.with_traceback(sys.exc_info()[2]))
                 sys.exit(1)
 
-    quicksort(data)
+    data = quicksort(data)
     for i in range(0, len(data), 10):
         print(' '.join(map(str, data[i:i+10])))
 
 
 def quicksort(data):
-    _quicksort(data, 0, len(data)-1)
+    # _quicksort(data, 0, len(data)-1)
+    if not data:
+        return data
+    pivot = data[0]
+    left = []
+    right = []
+    for i in range(1, len(data)):
+        if data[i] < pivot:
+            left.append(data[i])
+        else:
+            right.append(data[i])
+
+    return quicksort(left) + [pivot] + quicksort(right)
+
 
 
 def _quicksort(data, left, right):
