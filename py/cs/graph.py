@@ -11,7 +11,7 @@ class UndirectedGraph:
         self.graph[vertex2].append(edge)
 
     def get(self, vertex):
-        return [edge for edge in self.graph[vertex]]
+        return sorted(edge for edge in self.graph[vertex])
 
 
 class Edge:
