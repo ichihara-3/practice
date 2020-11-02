@@ -2,18 +2,47 @@ import sys
 
 
 class UndirectedGraph:
-
     def __init__(self, size):
-        self.graph = [[[] for _ in range(size)] for _ in range(size)]
+        self.graph = [[] for _ in range(size)]
 
     def add(self, vertex1, vertex2, weight=1):
-        self.graph[vertex1][vertex2].append(weight)
-        self.graph[vertex2][vertex1].append(weight)
-
+        edge = Edge(vertex1, vertex2, weight)
+        self.graph[vertex1].append(edge)
+        self.graph[vertex2].append(edge)
 
     def get(self, vertex):
-        return [(i, e) for i, e in enumerate(self.graph[vertex]) if e]
+        return [edge for edge in self.graph[vertex]]
 
+
+class Edge:
+    def __init__(self, v1, v2, w):
+        if v1 > v2:
+            v1, v2 = v2, v1
+        self._v1 = v1
+        self._v2 = v2
+        self._weight = w
+
+    def __eq__(self, o):
+        return self.values == o.values
+
+    def __lt__(self, o):
+        return self.values < o.values
+
+    def opposite(self, v):
+        if v == self._v1:
+            return self._v2
+        elif v == self._v2:
+            return self._v1
+        else:
+            raise ValueError("Not Found")
+
+    @property
+    def values(self):
+        return self._v1, self._v2, self._weight
+
+    @property
+    def weight(self):
+        return self._weight
 
 
 def main():
@@ -30,18 +59,13 @@ def main():
             v1, v2, w = map(int, e.split())
             graph.add(v1, v2, w)
 
-
     while True:
-        print('-' * 32)
+        print("-" * 32)
         x = int(input())
-        print('-' * 2)
-        for y, el in graph.get(x):
-            for w in el:
-                print(y, w)
+        print("-" * 2)
+        for edge in graph.get(x):
+            print(edge.opposite(x), edge.weight)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
-
-
