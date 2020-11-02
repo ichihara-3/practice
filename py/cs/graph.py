@@ -1,24 +1,44 @@
 import sys
 
 
+class UndirectedGraph:
+
+    def __init__(self, size):
+        self.graph = [[[] for _ in range(size)] for _ in range(size)]
+
+    def add(self, vertex1, vertex2, weight=1):
+        self.graph[vertex1][vertex2].append(weight)
+        self.graph[vertex2][vertex1].append(weight)
+
+
+    def get(self, vertex):
+        return [(i, e) for i, e in enumerate(self.graph[vertex]) if e]
+
+
+
 def main():
 
     with open(sys.argv[1]) as f:
         V = int(next(f))
         E = int(next(f))
-        Graph = [[[] for _ in range(V)] for _ in range(V)]
+
+        print(V, E)
+
+        graph = UndirectedGraph(size=V)
 
         for e in f:
             v1, v2, w = map(int, e.split())
-            Graph[v1][v2].append(w)
-            Graph[v2][v1].append(w)
+            graph.add(v1, v2, w)
 
 
     while True:
+        print('-' * 32)
         x = int(input())
-        for i in range(len(Graph[x])):
-            for w in Graph[x][i]:
-                print(i, w)
+        print('-' * 2)
+        for y, el in graph.get(x):
+            for w in el:
+                print(y, w)
+
 
 
 if __name__ == '__main__':
