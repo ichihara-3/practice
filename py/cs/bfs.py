@@ -1,3 +1,4 @@
+from pprint import pprint
 import sys
 from graph import UndirectedGraph
 
@@ -15,22 +16,21 @@ def main():
     while True:
         start = int(input())
 
-        bfs(graph, start)
+        print(bfs(graph, start))
 
 
 def bfs(graph, start):
-    res = []
     queue = [start]
-    visited = {}
+    visited = []
 
     while queue:
         node = queue.pop(0)
-        res.append(node)
-        visited.add(node)
+        visited.append(node)
         for edge in graph.get(node):
             v = edge.opposite(node)
             if v not in visited:
                 queue.append(v)
+    return visited
 
 
 if __name__ == '__main__':

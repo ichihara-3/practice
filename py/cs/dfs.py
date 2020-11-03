@@ -1,3 +1,4 @@
+from pprint import pprint
 import sys
 from graph import UndirectedGraph
 
@@ -16,22 +17,23 @@ def main():
         start = int(input())
         print('-' * 2)
 
-        dfs(graph, start)
+        pprint(dfs(graph, start))
+
         print('-' * 32)
 
 
 def dfs(graph, start):
     stack = [start]
-    visited = set()
+    visited = []
 
     while stack:
         node = stack.pop()
-        visited.add(node)
-        print(node)
+        visited.append(node)
         for edge in graph.get(node):
             v = edge.opposite(node)
             if v not in visited:
                 stack.append(v)
+    return visited
 
 
 if __name__ == '__main__':
