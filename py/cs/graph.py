@@ -4,6 +4,11 @@ import sys
 class UndirectedGraph:
     def __init__(self, size):
         self.graph = [[] for _ in range(size)]
+        self._size = size
+
+    @property
+    def size(self):
+        return self._size
 
     def add(self, vertex1, vertex2, weight=1):
         edge = Edge(vertex1, vertex2, weight)
@@ -12,6 +17,10 @@ class UndirectedGraph:
 
     def get(self, vertex):
         return sorted(edge for edge in self.graph[vertex])
+
+    def __contains__(self, edge):
+        return edge in self.graph[edge.v1]
+
 
 
 class Edge:
@@ -35,6 +44,14 @@ class Edge:
             return self._v1
         else:
             raise ValueError("Not Found")
+
+    @property
+    def v1(self):
+        return self._v1
+
+    @property
+    def v2(self):
+        return self._v2
 
     @property
     def values(self):
