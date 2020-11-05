@@ -37,6 +37,9 @@ def shortestpath(graph, start, end):
     while A:
         _, v = heapq.heappop(A)
 
+        if v == end:
+            break
+
         for edge in graph.get(v):
             w = edge.opposite(v)
             if d[w] > d[v] + edge.weight:
