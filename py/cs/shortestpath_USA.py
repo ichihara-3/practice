@@ -1,6 +1,7 @@
 from os.path import exists
 import argparse
 import math
+import heapq
 import pickle
 
 from graph import Edge, UndirectedGraph
@@ -44,16 +45,49 @@ def main():
                 pickle.dump(node_to_coordinates, n)
                 pickle.dump(coordinates_to_node, c)
 
+    start = coordinates_to_node[(int(args.start_latitude.replace('.', '')), int(args.start_longitude.replace('.', '')))]
+    goal = coordinates_to_node[(int(args.goal_latitude.replace('.', '')), int(args.goal_longitude.replace('.', '')))]
 
+    path, distance = shortestpath(graph, start, goal)
 
-    print([edge.values for edge in graph.get(0)])
-
+    with open(args.outputfilename, 'w') as f:
+        f.writelines(map(lambda x: ' '.join(map(str,node_to_coordinates[x])) + '\n', path))
 
 
 def calc_dist(start_latitude, start_longitude, goal_latitude, goal_longitude):
     dx = start_latitude - goal_latitude
     dy = start_longitude - goal_longitude
     return dx ** 2 + dy ** 2
+
+
+def shortestpath(graph, start, end):
+
+    d = [float('inf') for _ in range(graph.size)]
+    d[start] = 0
+    A = []
+    prev = [-1 for _ in range(graph.size)]
+    heapq.heappush(A, (d[start], start))
+
+    while A:
+        _, v = heapq.heappop(A)
+
+        if v == end:
+            break
+
+        for edge in graph.get(v):
+            w = edge.opposite(v)
+            if d[w] > d[v] + edge.weight:
+                d[w] = d[v] + edge.weight
+                prev[w] = v
+                heapq.heappush(A, (d[w], w))
+
+    now = end
+    path = [now]
+    while now != start:
+        now = prev[now]
+        path.append(now)
+    path = reversed(path)
+    return path, d[end]
 
 
 def get_args():
