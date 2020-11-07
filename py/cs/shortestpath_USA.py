@@ -33,10 +33,9 @@ def main():
             graph = UndirectedGraph(size=v)
             for line in graph_file:
                 v1, v2, w = map(int, line.split())
-                distance = calc_dist(*node_to_coordinates[v1], *node_to_coordinates[v2])
-                if Edge(v1, v2, distance) in graph:
+                if Edge(v1, v2, w) in graph:
                     continue
-                graph.add(v1, v2, distance)
+                graph.add(v1, v2, w)
 
             with open('graph.pickle', 'wb') as g, \
                     open('node_to_coordinates.pickle', 'wb') as n,\
@@ -44,14 +43,30 @@ def main():
                 pickle.dump(graph, g)
                 pickle.dump(node_to_coordinates, n)
                 pickle.dump(coordinates_to_node, c)
+    start_la, start_lo = find_nearest_point(coordinates_to_node.keys(), int(args.start_latitude.replace('.', '')), int(args.start_longitude.replace('.', '')))
+    goal_la, goal_lo = find_nearest_point(coordinates_to_node.keys(), int(args.goal_latitude.replace('.', '')), int(args.goal_longitude.replace('.', '')))
 
-    start = coordinates_to_node[(int(args.start_latitude.replace('.', '')), int(args.start_longitude.replace('.', '')))]
-    goal = coordinates_to_node[(int(args.goal_latitude.replace('.', '')), int(args.goal_longitude.replace('.', '')))]
+    start = coordinates_to_node[(start_la, start_lo)]
+    goal = coordinates_to_node[(goal_la, goal_lo)]
 
     path, distance = shortestpath(graph, start, goal)
 
     with open(args.outputfilename, 'w') as f:
         f.writelines(map(lambda x: ' '.join(map(str,node_to_coordinates[x])) + '\n', path))
+
+
+def find_nearest_point(coordinates_list, latitude, longitiude):
+    min_dist = float('inf')
+    nearest_latitude = None
+    nearest_longitude = None
+    for la, lo in coordinates_list:
+        dist = calc_dist(la, lo, latitude, longitiude)
+        if dist < min_dist:
+            min_dist = dist
+            nearest_latitude = la
+            nearest_longitude = lo
+    return nearest_latitude, nearest_longitude
+
 
 
 def calc_dist(start_latitude, start_longitude, goal_latitude, goal_longitude):
@@ -71,8 +86,6 @@ def shortestpath(graph, start, end):
     while A:
         _, v = heapq.heappop(A)
 
-        if v == end:
-            break
 
         for edge in graph.get(v):
             w = edge.opposite(v)
