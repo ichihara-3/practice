@@ -7,6 +7,15 @@ import time
 
 from graph import Edge, UndirectedGraph
 
+
+class Variables:
+
+    def __init__(self):
+        self.node_to_coordinates = []
+        self.coordinates_to_node = []
+
+var = Variables()
+
 def main():
     args = get_args()
 
@@ -15,20 +24,20 @@ def main():
                 open('node_to_coordinates.pickle', 'rb') as n,\
                 open('coordinates_to_node.pickle', 'rb') as c:
             graph = pickle.load(g)
-            node_to_coordinates = pickle.load(n)
-            coordinates_to_node = pickle.load(c)
+            var.node_to_coordinates = pickle.load(n)
+            var.coordinates_to_node = pickle.load(c)
     else:
 
         with open(args.graph_filename) as graph_file, \
                 open(args.coordinates_filename) as coordinates_file:
 
-            node_to_coordinates = []
-            coordinates_to_node = {}
+            var.node_to_coordinates = []
+            var.coordinates_to_node = {}
             n = int(next(coordinates_file))
             for _ in range(n):
                 node, la, lo = map(int, next(coordinates_file).split())
-                node_to_coordinates.append((la, lo))
-                coordinates_to_node[(la, lo)] = node
+                var.node_to_coordinates.append((la, lo))
+                var.coordinates_to_node[(la, lo)] = node
 
             v, e = map(int, next(graph_file).split())
             graph = UndirectedGraph(size=v)
@@ -42,13 +51,13 @@ def main():
                     open('node_to_coordinates.pickle', 'wb') as n,\
                     open('coordinates_to_node.pickle', 'wb') as c:
                 pickle.dump(graph, g)
-                pickle.dump(node_to_coordinates, n)
-                pickle.dump(coordinates_to_node, c)
-    start_la, start_lo = find_nearest_point(coordinates_to_node.keys(), int(args.start_latitude.replace('.', '')), int(args.start_longitude.replace('.', '')))
-    goal_la, goal_lo = find_nearest_point(coordinates_to_node.keys(), int(args.goal_latitude.replace('.', '')), int(args.goal_longitude.replace('.', '')))
+                pickle.dump(var.node_to_coordinates, n)
+                pickle.dump(var.coordinates_to_node, c)
+    start_la, start_lo = find_nearest_point(var.coordinates_to_node.keys(), int(args.start_latitude.replace('.', '')), int(args.start_longitude.replace('.', '')))
+    goal_la, goal_lo = find_nearest_point(var.coordinates_to_node.keys(), int(args.goal_latitude.replace('.', '')), int(args.goal_longitude.replace('.', '')))
 
-    start = coordinates_to_node[(start_la, start_lo)]
-    goal = coordinates_to_node[(goal_la, goal_lo)]
+    start = var.coordinates_to_node[(start_la, start_lo)]
+    goal = var.coordinates_to_node[(goal_la, goal_lo)]
 
     start_time = time.time()
 
@@ -58,7 +67,7 @@ def main():
     print(f'elapsed time: {elapsed}')
 
     with open(args.outputfilename, 'w') as f:
-        f.writelines(map(lambda x: ' '.join(map(str,node_to_coordinates[x])) + '\n', path))
+        f.writelines(map(lambda x: ' '.join(map(str,var.node_to_coordinates[x])) + '\n', path))
 
 
 def find_nearest_point(coordinates_list, latitude, longitiude):
@@ -81,6 +90,37 @@ def calc_dist(start_latitude, start_longitude, goal_latitude, goal_longitude):
     return dx ** 2 + dy ** 2
 
 
+# def shortestpath(graph, start, end):
+
+#     d = [float('inf') for _ in range(graph.size)]
+#     d[start] = 0
+#     A = []
+#     prev = [-1 for _ in range(graph.size)]
+#     heapq.heappush(A, (d[start], start))
+
+#     while A:
+#         _, v = heapq.heappop(A)
+
+
+#         if v == end:
+#             break
+
+#         for edge in graph.get(v):
+#             w = edge.opposite(v)
+#             if d[w] > d[v] + edge.weight:
+#                 d[w] = d[v] + edge.weight
+#                 prev[w] = v
+#                 heapq.heappush(A, (d[w], w))
+
+#     now = end
+#     path = [now]
+#     while now != start:
+#         now = prev[now]
+#         path.append(now)
+#     path = reversed(path)
+#     return path, d[end]
+
+
 def shortestpath(graph, start, end):
 
     d = [float('inf') for _ in range(graph.size)]
@@ -101,7 +141,7 @@ def shortestpath(graph, start, end):
             if d[w] > d[v] + edge.weight:
                 d[w] = d[v] + edge.weight
                 prev[w] = v
-                heapq.heappush(A, (d[w], w))
+                heapq.heappush(A, (d[w] + euclidean_distance(*var.node_to_coordinates[w], *var.node_to_coordinates[end]), w))
 
     now = end
     path = [now]
@@ -110,6 +150,10 @@ def shortestpath(graph, start, end):
         path.append(now)
     path = reversed(path)
     return path, d[end]
+
+
+def euclidean_distance(x1, y1, x2, y2):
+    return math.sqrt((x1-x2)**2 + (y1-y2) **2)
 
 
 def get_args():
