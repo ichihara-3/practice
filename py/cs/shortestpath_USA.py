@@ -3,6 +3,7 @@ import argparse
 import math
 import heapq
 import pickle
+import time
 
 from graph import Edge, UndirectedGraph
 
@@ -49,7 +50,12 @@ def main():
     start = coordinates_to_node[(start_la, start_lo)]
     goal = coordinates_to_node[(goal_la, goal_lo)]
 
+    start_time = time.time()
+
     path, distance = shortestpath(graph, start, goal)
+
+    elapsed = time.time() - start_time
+    print(f'elapsed time: {elapsed}')
 
     with open(args.outputfilename, 'w') as f:
         f.writelines(map(lambda x: ' '.join(map(str,node_to_coordinates[x])) + '\n', path))
@@ -86,6 +92,9 @@ def shortestpath(graph, start, end):
     while A:
         _, v = heapq.heappop(A)
 
+
+        if v == end:
+            break
 
         for edge in graph.get(v):
             w = edge.opposite(v)
