@@ -90,37 +90,6 @@ def calc_dist(start_latitude, start_longitude, goal_latitude, goal_longitude):
     return dx ** 2 + dy ** 2
 
 
-# def shortestpath(graph, start, end):
-
-#     d = [float('inf') for _ in range(graph.size)]
-#     d[start] = 0
-#     A = []
-#     prev = [-1 for _ in range(graph.size)]
-#     heapq.heappush(A, (d[start], start))
-
-#     while A:
-#         _, v = heapq.heappop(A)
-
-
-#         if v == end:
-#             break
-
-#         for edge in graph.get(v):
-#             w = edge.opposite(v)
-#             if d[w] > d[v] + edge.weight:
-#                 d[w] = d[v] + edge.weight
-#                 prev[w] = v
-#                 heapq.heappush(A, (d[w], w))
-
-#     now = end
-#     path = [now]
-#     while now != start:
-#         now = prev[now]
-#         path.append(now)
-#     path = reversed(path)
-#     return path, d[end]
-
-
 def shortestpath(graph, start, end):
 
     d = [float('inf') for _ in range(graph.size)]
@@ -141,7 +110,7 @@ def shortestpath(graph, start, end):
             if d[w] > d[v] + edge.weight:
                 d[w] = d[v] + edge.weight
                 prev[w] = v
-                heapq.heappush(A, (d[w] + euclidean_distance(*var.node_to_coordinates[w], *var.node_to_coordinates[end]), w))
+                heapq.heappush(A, (d[w], w))
 
     now = end
     path = [now]
@@ -152,8 +121,39 @@ def shortestpath(graph, start, end):
     return path, d[end]
 
 
-def euclidean_distance(x1, y1, x2, y2):
-    return math.sqrt((x1-x2)**2 + (y1-y2) **2)
+# def shortestpath(graph, start, end):
+
+#     d = [float('inf') for _ in range(graph.size)]
+#     d[start] = 0
+#     A = []
+#     prev = [-1 for _ in range(graph.size)]
+#     heapq.heappush(A, (d[start], start))
+
+#     while A:
+#         _, v = heapq.heappop(A)
+
+
+#         if v == end:
+#             break
+
+#         for edge in graph.get(v):
+#             w = edge.opposite(v)
+#             if d[w] > d[v] + edge.weight:
+#                 d[w] = d[v] + edge.weight
+#                 prev[w] = v
+#                 heapq.heappush(A, (d[w] + euclidean_distance(*var.node_to_coordinates[w], *var.node_to_coordinates[end]), w))
+
+#     now = end
+#     path = [now]
+#     while now != start:
+#         now = prev[now]
+#         path.append(now)
+#     path = reversed(path)
+#     return path, d[end]
+
+
+# def euclidean_distance(x1, y1, x2, y2):
+#     return math.sqrt((x1-x2)**2 + (y1-y2) **2)
 
 
 def get_args():
