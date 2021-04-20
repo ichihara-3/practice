@@ -121,16 +121,6 @@ class TokenType(Enum):
     Null = auto()
 
 
-class NodeType(Enum):
-    Object = auto()
-    Array = auto()
-    String = auto()
-    Number = auto()
-    TrueType = auto()
-    FalseType = auto()
-    Null = auto()
-
-
 class Token:
     def __init__(self, t: TokenType, v: str = None, d: bool = None):
         self._type = t
