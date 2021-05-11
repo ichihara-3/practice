@@ -183,7 +183,7 @@ class Tokens:
             raise ValueError("No token exist")
         token = self._tokens[0]
         if token.type != t:
-            raise ValueError("unexpected token")
+            raise ValueError("unexpected token: {}".format(token.value))
         self._tokens.pop()
 
     def expect(self, string: str):
@@ -409,6 +409,7 @@ class JsonObject:
 
 
 class Null(JsonObject):
+
     def to_py_object(self):
         return None
 
@@ -417,6 +418,7 @@ class Null(JsonObject):
 
 
 class TrueObject(JsonObject):
+
     def to_py_object(self):
         return True
 
@@ -425,6 +427,7 @@ class TrueObject(JsonObject):
 
 
 class FalseObject(JsonObject):
+
     def to_py_object(self):
         return False
 
@@ -460,6 +463,7 @@ class Number(JsonObject):
 
 
 class Array(JsonObject):
+
     def to_py_object(self):
         return [e.to_py_object() for e in self._elements]
 
@@ -468,6 +472,7 @@ class Array(JsonObject):
 
 
 class Object(JsonObject):
+
     def to_py_object(self):
         return {m.key: m.value.to_py_object() for m in self._members}
 
@@ -498,7 +503,10 @@ class ObjMember:
 
 class Parser:
     def parse(self, tokens: Tokens) -> JsonObject:
-        return self._json(tokens)
+        j = self._json(tokens)
+        if not tokens.is_empty():
+            raise ValueError('unexpected trailing token: {}'.format(tokens.pop().value))
+        return j
 
     def _json(self, tokens: Tokens) -> JsonObject:
         return self._element(tokens)
@@ -523,7 +531,7 @@ class Parser:
         number = tokens.consume_number()
         if number:
             return Number(v=number.value, d=number.is_decimal)
-        raise ValueError("unexpected token")
+        raise ValueError("unexpected token: {}".format(tokens.pop().value))
 
     def _object(self, tokens: Tokens) -> List[ObjMember]:
         ret = []
