@@ -1,8 +1,6 @@
 fn main() {
-    // compile error
-    {
-        let a = String::from("Hello");
-    }
+    let a = String::from("Hello");
+    let b = &a;
+    println!("{}, world!", b);
     println!("{}, world!", a);
 }
-
