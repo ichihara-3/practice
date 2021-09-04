@@ -1,11 +1,19 @@
-fn print_message(name: &String) {
-    println!("Hello, {}", name);
+
+struct Point {
+    x: i32,
+    y: i32,
 }
 
+fn get_point<'a>() -> &'a Point {
+    let p = Point {
+        x: 0,
+        y: 0,
+    };
+    &p
+}
+
+
 fn main() {
-    let a = String::from("World");
-    let b = &a;
-    print_message(b);
-    print_message(&a);
-    println!("{}", a);
+    let p = get_point();
+    println!("{} {}", p.x, p.y);
 }
