@@ -1,6 +1,11 @@
+fn print_message(name: &String) {
+    println!("Hello, {}", name);
+}
+
 fn main() {
-    let a = String::from("Hello");
+    let a = String::from("World");
     let b = &a;
-    println!("{}, world!", b);
-    println!("{}, world!", a);
+    print_message(b);
+    print_message(&a);
+    println!("{}", a);
 }
