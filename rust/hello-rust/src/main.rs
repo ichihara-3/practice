@@ -4,12 +4,11 @@ struct Point {
     y: i32,
 }
 
-fn get_point<'a>() -> &'a Point {
-    let p = Point {
+fn get_point() -> Point {
+    return Point {
         x: 0,
         y: 0,
     };
-    &p
 }
 
 
