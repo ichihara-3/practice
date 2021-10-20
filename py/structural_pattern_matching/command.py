@@ -7,8 +7,14 @@ def main():
         match command:
             case ["move", direction]:
                 print(f"move to {direction}")
-            case ["attack", target, skill]:
+            case ["go", ("north" | "south" | "east" | "west")]:
+                print(f"go to {command[1]}")
+            case ["go", _]:
+                print(f"====invalid direction====")
+            case ["attack", target, skill] if target == "enemy":
                 print(f"attack to {target} by {skill}")
+            case ["attack", _, _]:
+                print(f"====invalid target====")
             case ["home"]:
                 print(f"go back home ......")
             case ["message", *contents]:
