@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: sample-label
-  labales:
+  labels:
     label1: val1
     label2: val2
 spec:
