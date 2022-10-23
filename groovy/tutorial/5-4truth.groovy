@@ -1,0 +1,5 @@
+assert "empty" == ([] ? "full" : "empty")
+assert "empty" == ([:] ? "full" : "empty")
+assert "empty" == (0 ? "full" : "empty")
+assert "empty" == ("" ? "full": "empty")
+assert "false" == (false ? "true": "false")
