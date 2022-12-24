@@ -20,3 +20,7 @@ n = a `div` length xs
 mylast xs = head (reverse xs)
 mylast2 xs = xs !! ((length xs)-1)
 mylast3 xs = head (drop ((length xs) -1) xs)
+
+myinit xs = reverse(drop 1 (reverse xs))
+myinit2 xs = take ((length xs) - 1) xs
+myinit3 xs = reverse (tail (reverse xs))
