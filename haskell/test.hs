@@ -24,3 +24,18 @@ mylast3 xs = head (drop ((length xs) -1) xs)
 myinit xs = reverse(drop 1 (reverse xs))
 myinit2 xs = take ((length xs) - 1) xs
 myinit3 xs = reverse (tail (reverse xs))
+
+myeven n = n `mod` 2 == 0
+myodd n = not (myeven n)
+
+add :: (Int, Int) -> Int
+add (x, y) = x + y
+
+zeroto :: Int -> [Int]
+zeroto n = [0..n]
+
+add' :: Int -> (Int -> Int)
+add' x y = x + y
+
+mult :: Int -> (Int -> (Int -> Int))
+mult x y z = x*y*z
