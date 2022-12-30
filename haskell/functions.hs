@@ -80,3 +80,57 @@ third2 xs = xs!!2
 third3 :: [a] -> a
 third3 (_:_:a:_) = a
 
+safetail1 :: [a] -> [a]
+safetail1 xs = if null xs then [] else tail xs
+
+safetail2 :: [a] -> [a]
+safetail2 xs | null xs   = []
+             | otherwise = tail xs
+
+safetail3 :: [a] -> [a]
+safetail3 [] = []
+safetail3 xs = tail xs
+
+(||) :: Bool -> Bool -> Bool
+True || True = True
+False || True = True
+True || False = True
+False || False = False
+
+(|||) :: Bool -> Bool -> Bool
+False ||| False = False
+_ ||| _ = True
+
+(||||) :: Bool -> Bool -> Bool
+True |||| _ = True
+_ |||| True = True
+_ |||| _ = False
+
+(|||||) :: Bool -> Bool -> Bool
+True ||||| _ = True
+False ||||| b = b
+
+(||||||) :: Bool -> Bool -> Bool
+b |||||| c | b == c    = b
+           | otherwise = True
+
+(&&) :: Bool -> Bool -> Bool
+(&&) a b = if a then if b then True else False else False
+
+(&&&&) :: Bool -> Bool -> Bool
+(&&&&) a b = if a then b else False
+
+
+mult :: Int -> Int -> Int -> Int
+-- mult x y z = x * y * z
+mult = \x -> (\y -> (\z -> x * y * z))
+
+-- Luhn Algorithm
+luhnDouble :: Int -> Int
+luhnDouble n | n * 2 > 9 = n * 2 - 9
+             | otherwise = n * 2
+
+luhn :: Int -> Int -> Int -> Int -> Bool
+luhn a b c d | (luhnDouble a + b + luhnDouble c + d)
+                  `mod` 10 == 0 = True
+             | otherwise        = False
