@@ -101,3 +101,38 @@ perfects :: Int -> [Int]
 perfects n = [x | x <- [1..n], perfect x]
   where
     perfect n = n == sum [x | x <- factors n, x /= n]
+
+-- [(x, y)| x <- [1, 2, 3], y<-[4, 5, 6]]
+
+result = concat [[(x, y)| y <- [4, 5, 6]] | x <- [1, 2, 3]]
+
+positions2 :: Eq a => a -> [a] -> [Int]
+positions2 x xs = find x [(x', y)| (x', y) <- zip xs [0..]]
+
+scalarproduct :: [Int] -> [Int] -> Int
+scalarproduct xs ys = sum [x*y| (x, y) <- zip xs ys]
+
+
+lowLet2int :: Char -> Int
+lowLet2int c = ord c - ord 'a'
+
+lowInt2let :: Int -> Char
+lowInt2let n = chr (ord 'a' + n)
+
+upLet2int :: Char -> Int
+upLet2int c = ord c - ord 'A'
+
+upInt2let :: Int -> Char
+upInt2let n = chr (ord 'A' + n)
+
+shift2 :: Int -> Char -> Char
+shift2 n c | isLower c = lowInt2let ((lowLet2int c + n) `mod` 26)
+          | isUpper c = upInt2let ((upLet2int c + n) `mod` 26)
+          | otherwise = c
+
+
+encode2 :: Int -> String -> String
+encode2 n xs = [shift2 n x | x <- xs]
+
+decode2 :: Int -> String -> String
+decode2 n xs = encode2 (-n) xs
