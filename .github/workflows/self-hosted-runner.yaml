@@ -1,0 +1,13 @@
+name: Test self hosted runner
+on: [push]
+jobs:
+  Test-Self-Hosted-Runner:
+    runs-on: self-hosted
+    steps:
+      - run: echo "🎉 self-hosted runner で実行されたよ！"
+      - name: checkout
+        uses: actions/checkout@v3
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner"
+      - name: List files in repository
+        run: |
+          ls ${{ github.workspace }}
