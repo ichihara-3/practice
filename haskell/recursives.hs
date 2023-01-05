@@ -70,3 +70,32 @@ evens (x:xs) = x : odds xs
 odds :: [a] -> [a]
 odds [] = []
 odds (_:xs) = evens xs
+
+-- section 6 practice
+-- 1
+fac2 :: Integer -> Integer
+fac2 0 = 1
+fac2 n | n > 0 = n * fac (n - 1)
+-- 2
+sumdown :: Int -> Int
+sumdown 0 = 0
+sumdown n | n > 0 = n + sumdown (n - 1)
+-- 3
+(^^^) :: Int -> Int -> Int
+_ ^^^ 0 = 1
+n ^^^ m = n * (n ^^^ (m-1))
+-- 2 ^ 3
+-- = 2 * (2 ^^^ 2)
+-- = 2 * (2 * (2 ^^^ 1))
+-- = 2 * (2 * (2 * ( 2 ^^^ 0)))
+-- = 2 * (2 * (2 * 1))
+-- = 2 * 2 * 2 = 8
+
+-- 4
+euclid :: Int -> Int -> Int
+euclid n m | n < m     = euclid n (m - n)
+           | n > m     = euclid (n - m) m
+           | otherwise = n
+
+--
+
