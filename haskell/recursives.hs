@@ -136,3 +136,79 @@ replicate1 n x = x : replicate1 (n-1) x
 (x:xs) !!!! 0 = x
 (_:xs) !!!! n = xs !!!! (n-1)
 
+
+elem1 :: Eq a => a -> [a] -> Bool
+elem1 _ [] = False
+elem1 x (y:ys) | x == y    = True
+               | otherwise = elem1 x ys
+
+-- 7
+merge :: Ord a => [a] -> [a] -> [a]
+merge xs [] = xs
+merge [] ys = ys
+merge (x:xs) (y:ys) | x < y    = x : merge xs (y:ys)
+                    | otherwise = y : merge (x:xs) ys
+
+
+-- 8
+halve :: Ord a => [a] -> ([a], [a])
+halve xs = splitAt (length xs `div` 2) xs
+
+msort :: Ord a => [a] -> [a]
+msort [] = []
+msort [x] = [x]
+msort xs = merge (msort left) (msort right)
+           where
+             (left, right) = halve xs
+
+-- 9
+-- a. sum
+-- step 1
+-- sum :: Num a => [a] -> a
+-- step 2
+-- sum [] =
+-- sum (n:ns) =
+-- step 3
+-- sum [] = 0
+-- step 4
+-- sum (n:ns) = n + sum ns
+-- step 5
+sum :: Num a => [a] -> a
+sum = foldr (+) 0
+-- b. take
+-- step 1
+-- take :: Int -> [a] -> [a]
+-- step 2
+-- take 0 (x:xs) =
+-- take 0 [] =
+-- take n [] =
+-- take n (x:xs) =
+-- step 3
+-- take 0 [] = []
+-- take 0 xs = []
+-- take n [] = []
+-- step 4
+-- take n (x:xs) = x : take (n-1) xs
+-- step 5
+take1 :: Int -> [a] -> [a]
+take1 0 _ = []
+take1 _ [] = []
+take1 n (x:xs) = x : take1 (n-1) xs
+
+-- c. last
+-- step 1
+-- last :: [a] -> a
+-- step 2
+-- last [] = -> undefined
+-- last [x] =
+-- last (x:xs) =
+-- step 3
+-- last [x] = x
+-- step 4
+-- last (x:xs) = last xs
+-- step 5
+last1 :: [a] -> a
+last1 [x] = x
+last1 (_:xs) = last1 xs
+
+
