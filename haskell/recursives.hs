@@ -97,5 +97,42 @@ euclid n m | n < m     = euclid n (m - n)
            | n > m     = euclid (n - m) m
            | otherwise = n
 
---
+-- 5
+-- length [1, 2, 3]
+-- = 1 + length [2, 3]
+-- = 1 + 1 + length [3]
+-- = 1 + 1 + 1 + length []
+-- = 1 + 1 + 1 + 0 = 3
+
+-- drop 3 [1,2,3,4,5]
+-- = drop 2 [2, 3, 4, 5]
+-- = drop 1 [3, 4, 5]
+-- = drop 0 [4, 5]
+-- = [4, 5]
+
+
+-- init [1,2,3]
+-- = 1 : init [2, 3]
+-- = 1 : 2 : init [3]
+-- = 1 : 2 : []
+-- = [1, 2]
+
+-- 6
+and1 :: [Bool] -> Bool
+and1 [] = True
+and1 [x] = x
+and1 (x:xs)| x == True = and1 xs
+          | otherwise = False
+
+concat1 :: [[a]] -> [a]
+concat1 [] = []
+concat1 (x:xs) = x ++ concat1 xs
+
+replicate1 :: Int -> a -> [a]
+replicate1 0 _ = []
+replicate1 n x = x : replicate1 (n-1) x
+
+(!!!!) :: [a] -> Int -> a
+(x:xs) !!!! 0 = x
+(_:xs) !!!! n = xs !!!! (n-1)
 
