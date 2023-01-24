@@ -48,3 +48,28 @@ mysum = sum' 0
   where
     sum' v [] = v
     sum' v (x:xs) = sum' (v+x) xs
+
+mysum2 :: Integral a => [a] -> a
+mysum2 = foldl (+) 0
+
+myproduct :: Integral a => [a] -> a
+myproduct = foldl (*) 1
+
+myor :: [Bool] -> Bool
+myor = foldl (||) False
+
+myand :: [Bool] -> Bool
+myand = foldl (&&) True
+
+mylength2 :: [a] -> Int
+mylength2 = foldl (\n _ -> n + 1) 0
+
+myreverse2 :: [a] -> [a]
+myreverse2 = foldl (\xs y -> y : xs) []
+
+--------
+myodd = not . even
+twice2 f = f . f
+
+compose :: [a -> a] -> (a -> a)
+compose = foldr (.) id
