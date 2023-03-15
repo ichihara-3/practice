@@ -1,0 +1,24 @@
+// open files and output to stdout
+
+package main
+
+import (
+	"io"
+	"log"
+	"os"
+)
+
+func main() {
+	file, err := os.Open("main.go")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	newFile, err := os.Create("newFile.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer newFile.Close()
+	writer := io.MultiWriter(os.Stdout, newFile)
+	io.Copy(writer, file)
+}
