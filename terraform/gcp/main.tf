@@ -5,6 +5,11 @@ terraform {
       version = "4.62.1"
     }
   }
+
+  backend "gcs" {
+    bucket  = "wasabi-playground-tf-backend"
+    prefix  = "terraform/state"
+  }
 }
 
 provider "google" {
@@ -14,7 +19,10 @@ provider "google" {
   zone        = "asia-northeast1-a"
 }
 
-resource "google_compute_ne" "vpc_network" {
-  name = "vpc-network"
+resource "google_storage_bucket" "bucket" {
+  name          = "wasabi-playground-tf-backend"
+  location      = "asia-northeast1"
+  storage_class = "REGIONAL"
 }
+
 
