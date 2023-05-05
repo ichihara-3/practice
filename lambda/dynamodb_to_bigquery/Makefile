@@ -21,5 +21,7 @@ venv:
 clean:
 	rm -f dynamodb_to_bigquery.zip
 
+deploy:
+	AWS_PAGER= aws lambda update-function-code --function-name syncReservations --zip-file fileb://dynamodb_to_bigquery.zip
 
-.PHONY: clean
+.PHONY: clean deploy
