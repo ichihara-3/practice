@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Todo List</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>My Todo List</h1>
+    <p>TODO</p>
+    <form>
+      <button type="button" id="add">Add!</button>
+      <input type="text" id="task" />
+    </form>
+    <ul></ul>
+    <p>DONE</p>
+    <ul></ul>
+    <script>
+      "use strict";
+      const add = document.getElementById("add");
+      const task = document.getElementById("task");
+      const list = document.querySelector("ul");
+      const todos = [];
+      add.addEventListener("click", () => {
+        const todo = task.value;
+        const li = document.createElement("li");
+        // add checkbox
+        const checkbox = document.createElement("input");
+        const label = document.createElement("label");
+        const checkboxId = `checkbox-${todos.length}`;
+        checkbox.className = "checkbox-todo";
+        label.textContent = todo;
+        label.htmlFor = checkboxId;
+        checkbox.type = "checkbox";
+        li.appendChild(checkbox);
+        li.appendChild(label);
+        list.appendChild(li);
+        task.value = "";
+      });
+    </script>
+  </body>
+</html>
