@@ -12,17 +12,27 @@
       <button type="button" id="add">Add!</button>
       <input type="text" id="task" />
     </form>
-    <ul></ul>
+    <ul id="todo-list"></ul>
     <p>DONE</p>
-    <ul></ul>
+    <ul id="done-list"></ul>
     <script>
       "use strict";
-      const add = document.getElementById("add");
-      const task = document.getElementById("task");
-      const list = document.querySelector("ul");
-      const todos = [];
-      add.addEventListener("click", () => {
+      const onClickAdd = () => {
+        const onChecked = (event) => {
+          const checkbox = event.target;
+          const li = checkbox.parentNode;
+          const list = li.parentNode;
+          const id = list.id;
+          if (id === "todo-list" && checkbox.checked) {
+            document.getElementById("done-list").appendChild(li);
+            document.getElementById("todo-list").removeChild(li);
+          }
+        };
+        const task = document.getElementById("task");
+        const list = document.getElementById("todo-list");
+        const todos = [];
         const todo = task.value;
+        todos.push(todo);
         const li = document.createElement("li");
         // add checkbox
         const checkbox = document.createElement("input");
@@ -32,11 +42,17 @@
         label.textContent = todo;
         label.htmlFor = checkboxId;
         checkbox.type = "checkbox";
+        document.addEventListener("change", onChecked);
         li.appendChild(checkbox);
         li.appendChild(label);
         list.appendChild(li);
         task.value = "";
-      });
+      }
+      const addTodo = () => {
+        const add = document.getElementById("add");
+        add.addEventListener("click", onClickAdd);
+      };
+      addTodo();
     </script>
   </body>
 </html>
