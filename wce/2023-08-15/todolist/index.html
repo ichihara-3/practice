@@ -3,6 +3,7 @@
   <head>
     <title>My Todo List</title>
     <meta charset="utf-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
     <script>
       "use strict";
@@ -22,6 +23,7 @@
       };
 
       const handleAdd = (event) => {
+        event.preventDefault();
         const createTodoItem = (todoText) => {
           todos.push(todoText);
           const checkbox = document.createElement("input");
@@ -44,7 +46,6 @@
           });
           return li;
         };
-
         const input = document.getElementById("todo-input");
         const todoText = input.value;
         const list = document.getElementById("todo-list");
@@ -53,8 +54,8 @@
       };
       
       const addTodoHandler = () => {
-        const button = document.querySelector("#todo-form > button");
-        button.addEventListener("click", handleAdd);
+        const form = document.getElementById("todo-form");
+        form.addEventListener("submit", handleAdd);
       };
 
 
@@ -94,7 +95,7 @@
         <div id="input-box">
           <form id="todo-form">
             <input type="text" id="todo-input" placeholder="Add todo" />
-            <button type="button">Add</button>
+            <button type="submit">Add</button>
           </form>
         </div>
         <h2>Todo</h2>

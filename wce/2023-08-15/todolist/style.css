@@ -1,18 +1,76 @@
-.checkbox-todo:checked + label {
-  text-decoration: line-through;
+body {
+  font-family: 'Kosugi Maru', sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
 
 .todo {
+  background-color: #f5faff;
+  /* 例: 明るい青色 */
+  border: 1px solid #d0e0ff;
+  /* 枠線 */
+  padding: 1em;
+  /* 余白 */
   min-height: 10em;
+  display: flex;
+  flex-direction: column;
 }
 
 .done {
+  background-color: #e5f5e0;
+  /* 例: 明るい緑色 */
+  border: 1px solid #b5d0b0;
+  /* 枠線 */
+  padding: 1em;
+  /* 余白 */
   min-height: 10em;
+  display: flex;
+  flex-direction: column;
 }
 
 ul {
   list-style-type: none;
   padding: 0;
-  height: 100%;
   min-height: 10em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em; /* タイル間の間隔 */
+  cursor: pointer;
+}
+
+li {
+  width: 85%; /* タイルの幅 */
+  height: 4em; /* タイルの高さ */
+  display: flex;
+  cursor: pointer;
+  background-color: #ffffff;
+  /* タイルの背景色を白に設定 */
+  border: 1px solid #d0d0d0;
+  /* タイルの枠線を薄いグレーに設定 */
+  padding: 0.5em;
+  /* タイルの内側の余白を設定 */
+  margin: 0.5em;
+  /* タイル間の余白を設定 */
+  flex-direction: row;
+  /* チェックボックスとラベルを横に並べます */
+  align-items: center;
+  text-align: left;
+  border-radius: 5px;
+  /* タイルの角を丸くする */
+}
+
+.checkbox-todo {
+  margin-right: 10px;
+}
+
+.checkbox-todo:checked + label {
+  text-decoration: line-through;
+}
+
+label {
+  cursor: pointer; /* タイル上でマウスポインターを指に変更 */
 }
