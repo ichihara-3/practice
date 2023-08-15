@@ -1,0 +1,18 @@
+.checkbox-todo:checked + label {
+  text-decoration: line-through;
+}
+
+.todo {
+  min-height: 10em;
+}
+
+.done {
+  min-height: 10em;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  height: 100%;
+  min-height: 10em;
+}
