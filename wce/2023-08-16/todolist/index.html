@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Todo List</title>
+    <meta charset="utf-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      "use strict";
+
+      const todos = [];
+
+      const handleCheckbox = (event) => {
+        const checkbox = event.target;
+        const li = checkbox.parentNode;
+        const list = li.parentNode;
+        const id = list.id;
+        if (id === "todo-list" && checkbox.checked) {
+          document.getElementById("done-list").appendChild(li);
+        } else if (id === "done-list" && !checkbox.checked) {
+          document.getElementById("todo-list").appendChild(li);
+        }
+      };
+
+      const handleAdd = (event) => {
+        event.preventDefault();
+        const createTodoItem = (todoText) => {
+          todos.push(todoText);
+          const checkbox = document.createElement("input");
+          const checkboxId = `checkbox-${todos.length}`;
+          checkbox.id = checkboxId;
+          checkbox.className = "checkbox-todo";
+          checkbox.type = "checkbox";
+          const label = document.createElement("label");
+          label.textContent = todoText;
+          label.htmlFor = checkboxId;
+          document.addEventListener("change", handleCheckbox);
+          const li = document.createElement("li");
+          li.id = `todo-${todos.length}`;
+          li.draggable = true;
+          li.appendChild(checkbox);
+          li.appendChild(label);
+          li.addEventListener("dragstart", (event) => {
+            event.dataTransfer.dropEffect = "move";
+            event.dataTransfer.setData("text/plain", event.target.id);
+            const dropAreas = document.querySelectorAll(".drop-area");
+            dropAreas.forEach((area) => {
+              area.classList.add("highlight");
+            });
+            event.target.classList.add("dragging");
+            li.addEventListener("dragend", (event) => {
+              event.target.classList.remove("dragging");
+            });
+          });
+          return li;
+        };
+        const input = document.getElementById("todo-input");
+        const todoText = input.value;
+        const list = document.getElementById("todo-list");
+        list.appendChild(createTodoItem(todoText));
+        input.value = "";
+      };
+      
+      const addTodoHandler = () => {
+        const form = document.getElementById("todo-form");
+        form.addEventListener("submit", handleAdd);
+      };
+
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const todoList = document.getElementById("todo-list");
+        todoList.addEventListener("dragover", (event) => {
+          event.preventDefault();
+        });
+        todoList.addEventListener("drop", (event) => {
+          event.dataTransfer.dropEffect = "move";
+          const id = event.dataTransfer.getData("text/plain");
+          const li = document.getElementById(id);
+          const checkbox = li.querySelector("input");
+          checkbox.checked = false;
+          todoList.appendChild(li);
+          const dropAreas = document.querySelectorAll(".drop-area");
+          dropAreas.forEach((area) => {
+            area.classList.remove("highlight");
+          });
+        });
+        const doneList = document.getElementById("done-list");
+        doneList.addEventListener("dragover", (event) => {
+          event.preventDefault();
+          const dropAreas = document.querySelectorAll(".drop-area");
+        });
+        doneList.addEventListener("drop", (event) => {
+          event.dataTransfer.dropEffect = "move";
+          const id = event.dataTransfer.getData("text/plain");
+          const li = document.getElementById(id);
+          const checkbox = li.querySelector("input");
+          checkbox.checked = true;
+          doneList.appendChild(li);
+          const dropAreas = document.querySelectorAll(".drop-area");
+          dropAreas.forEach((area) => {
+            area.classList.remove("highlight");
+          });
+        });
+        addTodoHandler();
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>My Todo List</h1>
+      <div class="todo">
+        <div id="input-box">
+          <form id="todo-form">
+            <input type="text" id="todo-input" placeholder="Add todo" />
+            <button type="submit">Add</button>
+          </form>
+        </div>
+        <h2>Todo</h2>
+        <ul id="todo-list" class="drop-area"></ul>
+      </div>
+      <div class="done">
+        <h2>Done</h2>
+        <ul id="done-list" class="drop-area"></ul>
+      </div>
+    </div>
+    <script>
+      addTodoHandler();
+    </script>
+  </body>
+</html>
