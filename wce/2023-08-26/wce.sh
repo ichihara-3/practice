@@ -50,6 +50,7 @@ function finish() {
       git push
   fi
   echo "Session finished"
+  rm "${WCE_FILE}"
   export PS1="${PS1_ORIGINAL}"
 }
 
