@@ -8,6 +8,7 @@
 # wce.sh info -- show the info of all sessions
 
 WCE_FILE="$HOME/.wce"
+WCE_COUNT_FILE="$HOME/.wce_count"
 WCE_SUSPEND_FILE="$HOME/.wce_suspend"
 TODAY="$(date +%Y-%m-%d)"
 PS1_ORIGINAL="${PS1}"
@@ -23,8 +24,15 @@ function start() {
         exit 1
     fi
     touch "${WCE_FILE}"
+    if [ ! -f "${WCE_COUNT_FILE}" ]; then
+        echo "0" > "${WCE_COUNT_FILE}"
+        days=0
+    else
+      days="$(cat "${WCE_COUNT_FILE}")"
+    fi
     echo "Today is ${TODAY}"
-    echo "Session started"
+    echo "Write Code Everyday: The day ${days}"
+    echo "Session started!"
     export PS1="wce[${TODAY}]: ${PS1_ORIGINAL}"
 }
 
@@ -73,6 +81,28 @@ function resume() {
   rm "${WCE_SUSPEND_FILE}"
   git stash pop
   echo "Session resumed"
+}
+
+function status() {
+  if [[ ! -f "${WCE_FILE}" ]]; then
+    echo "Not Started"
+  elif [[ -f "${WCE_SUSPEND_FILE}" ]]; then
+    echo "Suspended"
+  else
+    echo "Started"
+  fi
+  echo "Today is ${TODAY}"
+  git status
+}
+
+function info() {
+  if [[ ! -f "${WCE_COUNT_FILE}" ]]; then
+    echo "No session info"
+    exit 1
+  else
+    days="$(cat "${WCE_COUNT_FILE}")"
+  fi
+  echo "Write Code Everyday: The day ${days}"
 }
 
 function main() {
