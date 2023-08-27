@@ -40,7 +40,7 @@ function start() {
     fi
 
     echo "Today is ${TODAY}"
-    echo days > "${WCE_COUNT_FILE}"
+    echo "${days}" > "${WCE_COUNT_FILE}"
     echo "Write Code Everyday: The day ${days}"
     echo "Session started!"
     export PS1="wce[${TODAY}]: ${PS1_ORIGINAL}"
