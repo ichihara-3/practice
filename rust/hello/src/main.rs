@@ -1,4 +1,10 @@
+use std::env;
+
+
 fn main() {
+    for arg in env::args().skip(1) {
+        println!("{}", arg);
+    }
     println!("Hello, world!");
     println!("Hello, world2!!!!!!!!!!!!!!");
     println!("{:.100}", add(1.1, 2.1));
