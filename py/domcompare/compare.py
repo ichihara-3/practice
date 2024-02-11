@@ -1,3 +1,4 @@
+import argparse
 import difflib
 import sys
 
@@ -71,8 +72,13 @@ def preprocess(soup: BeautifulSoup):
 
 
 def main():
-    html1 = readfile("./sample1.html")
-    html2 = readfile("./sample2.html")
+    parser = argparse.ArgumentParser(description="Compare two HTML files")
+    parser.add_argument("file1", help="First file to compare", nargs="?", default="sample1.html")
+    parser.add_argument("file2", help="Second file to compare", nargs="?", default="sample2.html")
+    args = parser.parse_args()
+
+    html1 = readfile(args.file1)
+    html2 = readfile(args.file2)
 
     soup1 = preprocess(BeautifulSoup(html1, "lxml"))
     soup2 = preprocess(BeautifulSoup(html2, "lxml"))
