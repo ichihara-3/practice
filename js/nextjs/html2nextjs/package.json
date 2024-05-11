@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "build": "tsc",
+    "install": "npm install",
+    "start": "node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/htmltojsx": "^0.0.33",
+    "@types/jsdom": "^21.1.6",
+    "@types/node": "^20.11.17"
+  },
+  "dependencies": {
+    "htmltojsx": "^0.3.0",
+    "jsdom": "^24.0.0"
+  }
+}
