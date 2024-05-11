@@ -83,7 +83,7 @@ def main():
     soup1 = preprocess(BeautifulSoup(html1, "lxml"))
     soup2 = preprocess(BeautifulSoup(html2, "lxml"))
 
-    printdiff(compare(soup1.prettify(), soup2.prettify()))
+    printdiff(compare(soup1.prettify(formatter="html"), soup2.prettify(formatter="html")))
 
 
 if __name__ == "__main__":
