@@ -1,0 +1,96 @@
+# CloudFormation pprotein
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation for ISUCON13 Final pprotein
+
+Parameters:
+  VpcId:
+    Description: "AWS EC2 VPC ID"
+    Type: AWS::EC2::VPC::Id
+  SubnetId:
+    Description: "AWS EC2 Subnet ID"
+    Type: AWS::EC2::Subnet::Id
+  AMI:
+    Description: "AWS EC2 Amazon Machine Image ID"
+    Type: AWS::EC2::Image::Id
+
+Resources:
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VpcId
+      GroupDescription: Security Group for ISUCON13 Final pprotein
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: "22"
+          ToPort: "22"
+          CidrIp: "0.0.0.0/0"
+          FromPort: "443"
+          ToPort: "443"
+          CidrIp: "0.0.0.0/0"
+        - IpProtocol: -1
+          CidrIp: "192.168.0.0/24"
+        - IpProtocol: tcp
+          FromPort: 9000
+          ToPort: 9000
+          CidrIp: 0.0.0.0/0
+
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Policies:
+        - PolicyName: IsuconEC2InstancePolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:DescribeInstances
+                  - ec2:DescribeVolumes
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DescribeSecurityGroups
+                  - ec2:DescribeAvailabilityZones
+                Resource: "*"
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref InstanceRole
+
+  PproteinInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AMI
+      InstanceType: c5.large
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      SubnetId: !Ref SubnetId
+      PrivateIpAddress: "192.168.0.14"
+      IamInstanceProfile: !Ref InstanceProfile
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 40
+            VolumeType: gp3
+      Tags:
+        - Key: Name
+          Value: isucon13-final-pprotein
+  PproteinInstanceIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      InstanceId: !Ref PproteinInstance

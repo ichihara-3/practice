@@ -1,0 +1,154 @@
+DEBUG:mcp.server.lowlevel.server:Initializing server 'fileviewer'
+DEBUG:mcp.server.lowlevel.server:Registering handler for ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for ListResourcesRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for ReadResourceRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for PromptListRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for GetPromptRequest
+INFO:__main__:Starting fileviewer server...
+DEBUG:asyncio:Using selector: KqueueSelector
+DEBUG:mcp.server.lowlevel.server:Received message: root=InitializedNotification(method='notifications/initialized', params=None, jsonrpc='2.0')
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x1068707d0>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Initializing server 'fileviewer'
+DEBUG:mcp.server.lowlevel.server:Registering handler for ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for ListResourcesRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for ReadResourceRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for PromptListRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for GetPromptRequest
+INFO:__main__:Starting fileviewer server...
+DEBUG:asyncio:Using selector: KqueueSelector
+DEBUG:mcp.server.lowlevel.server:Received message: root=InitializedNotification(method='notifications/initialized', params=None, jsonrpc='2.0')
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x1074e07d0>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x1074e1810>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x107373360>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x107372c40>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x107518830>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x10736ff00>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x10736fbd0>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x107495450>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x107496e50>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x107477110>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x107477200>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x107538ad0>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x1075382f0>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x10744eb60>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x1074262d0>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x107426150>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x10743bac0>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x10743be30>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Initializing server 'fileviewer'
+DEBUG:mcp.server.lowlevel.server:Registering handler for ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for ListResourcesRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for ReadResourceRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for PromptListRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for GetPromptRequest
+INFO:__main__:Starting fileviewer server...
+DEBUG:asyncio:Using selector: KqueueSelector
+DEBUG:mcp.server.lowlevel.server:Received message: root=InitializedNotification(method='notifications/initialized', params=None, jsonrpc='2.0')
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x104e19310>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x104e19950>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x104c955b0>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x104c97820>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x104e38cb0>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x1048ba360>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x104c9fce0>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x104db5450>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x104db6f50>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x104d97110>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x104d976b0>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x104e61010>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent

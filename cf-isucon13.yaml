@@ -142,7 +142,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       # isucon/isucon13
-      ImageId: "ami-006d211cb716fe8a0"
+      ImageId: !Ref AMI
       InstanceType: c5.large
       SecurityGroupIds:
         - !Ref SecurityGroup
@@ -165,7 +165,7 @@ Resources:
   FinalInstance3:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: "ami-06c947ddf8c38c43c"
+      ImageId: !Ref AMI
       InstanceType: c5.large
       SecurityGroupIds:
         - !Ref SecurityGroup

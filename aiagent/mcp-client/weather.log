@@ -1,0 +1,76 @@
+DEBUG:mcp.server.lowlevel.server:Initializing server 'weather'
+DEBUG:mcp.server.lowlevel.server:Registering handler for ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for ListResourcesRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for ReadResourceRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for PromptListRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for GetPromptRequest
+INFO:__main__:Starting weather server...
+DEBUG:asyncio:Using selector: KqueueSelector
+DEBUG:mcp.server.lowlevel.server:Received message: root=InitializedNotification(method='notifications/initialized', params=None, jsonrpc='2.0')
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x105c55090>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Initializing server 'weather'
+DEBUG:mcp.server.lowlevel.server:Registering handler for ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for ListResourcesRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for ReadResourceRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for PromptListRequest
+DEBUG:mcp.server.lowlevel.server:Registering handler for GetPromptRequest
+INFO:__main__:Starting weather server...
+DEBUG:asyncio:Using selector: KqueueSelector
+DEBUG:mcp.server.lowlevel.server:Received message: root=InitializedNotification(method='notifications/initialized', params=None, jsonrpc='2.0')
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x106d01090>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x106d01810>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x106baab10>
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type CallToolRequest
+INFO:__main__:creating request to https://api.weather.gov/points/38.5816,-121.4944
+DEBUG:httpcore.connection:connect_tcp.started host='api.weather.gov' port=443 local_address=None timeout=30.0 socket_options=None
+DEBUG:httpcore.connection:connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x106e4d010>
+DEBUG:httpcore.connection:start_tls.started ssl_context=<ssl.SSLContext object at 0x106d1bb60> server_hostname='api.weather.gov' timeout=30.0
+DEBUG:httpcore.connection:start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x106d03750>
+DEBUG:httpcore.http11:send_request_headers.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:send_request_headers.complete
+DEBUG:httpcore.http11:send_request_body.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:send_request_body.complete
+DEBUG:httpcore.http11:receive_response_headers.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Server', b'nginx/1.20.1'), (b'Content-Type', b'application/geo+json'), (b'Access-Control-Allow-Origin', b'*'), (b'Access-Control-Expose-Headers', b'X-Correlation-Id, X-Request-Id, X-Server-Id'), (b'X-Request-ID', b'7623b567-21e9-45ea-896d-ed83d3a2924d'), (b'X-Correlation-ID', b'20245000'), (b'X-Server-ID', b'vm-bldr-nids-apiapp8.ncep.noaa.gov'), (b'Content-Encoding', b'gzip'), (b'Content-Length', b'813'), (b'Cache-Control', b'public, max-age=74376, s-maxage=120'), (b'Expires', b'Mon, 13 Jan 2025 23:43:44 GMT'), (b'Date', b'Mon, 13 Jan 2025 03:04:08 GMT'), (b'Connection', b'keep-alive'), (b'Vary', b'Accept-Encoding'), (b'X-Edge-Request-ID', b'797fc953'), (b'Vary', b'Accept,Feature-Flags,Accept-Language'), (b'Strict-Transport-Security', b'max-age=31536000 ; includeSubDomains ; preload')])
+INFO:httpx:HTTP Request: GET https://api.weather.gov/points/38.5816,-121.4944 "HTTP/1.1 200 OK"
+DEBUG:httpcore.http11:receive_response_body.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:receive_response_body.complete
+DEBUG:httpcore.http11:response_closed.started
+DEBUG:httpcore.http11:response_closed.complete
+DEBUG:httpcore.connection:close.started
+DEBUG:httpcore.connection:close.complete
+INFO:__main__:creating request to https://api.weather.gov/gridpoints/STO/41,68/forecast
+DEBUG:httpcore.connection:connect_tcp.started host='api.weather.gov' port=443 local_address=None timeout=30.0 socket_options=None
+DEBUG:httpcore.connection:connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x106e71450>
+DEBUG:httpcore.connection:start_tls.started ssl_context=<ssl.SSLContext object at 0x106d1be30> server_hostname='api.weather.gov' timeout=30.0
+DEBUG:httpcore.connection:start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x106d2fbb0>
+DEBUG:httpcore.http11:send_request_headers.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:send_request_headers.complete
+DEBUG:httpcore.http11:send_request_body.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:send_request_body.complete
+DEBUG:httpcore.http11:receive_response_headers.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Server', b'nginx/1.20.1'), (b'Content-Type', b'application/geo+json'), (b'Access-Control-Allow-Origin', b'*'), (b'Access-Control-Expose-Headers', b'X-Correlation-Id, X-Request-Id, X-Server-Id'), (b'X-Request-ID', b'0892defe-9782-49f9-b3b2-a8df1450e19d'), (b'X-Correlation-ID', b'1a0c7c01'), (b'X-Server-ID', b'vm-bldr-nids-apiapp2.ncep.noaa.gov'), (b'Content-Encoding', b'gzip'), (b'Content-Length', b'1436'), (b'Cache-Control', b'public, max-age=3600, s-maxage=3600'), (b'Expires', b'Mon, 13 Jan 2025 04:04:08 GMT'), (b'Date', b'Mon, 13 Jan 2025 03:04:08 GMT'), (b'Connection', b'keep-alive'), (b'Vary', b'Accept-Encoding'), (b'X-Edge-Request-ID', b'797fc9e1'), (b'Vary', b'Accept,Feature-Flags,Accept-Language'), (b'Strict-Transport-Security', b'max-age=31536000 ; includeSubDomains ; preload')])
+INFO:httpx:HTTP Request: GET https://api.weather.gov/gridpoints/STO/41,68/forecast "HTTP/1.1 200 OK"
+DEBUG:httpcore.http11:receive_response_body.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:receive_response_body.complete
+DEBUG:httpcore.http11:response_closed.started
+DEBUG:httpcore.http11:response_closed.complete
+DEBUG:httpcore.connection:close.started
+DEBUG:httpcore.connection:close.complete
+DEBUG:mcp.server.lowlevel.server:Response sent
+DEBUG:mcp.server.lowlevel.server:Received message: <mcp.shared.session.RequestResponder object at 0x106d2f820>
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Dispatching request of type ListToolsRequest
+DEBUG:mcp.server.lowlevel.server:Response sent
