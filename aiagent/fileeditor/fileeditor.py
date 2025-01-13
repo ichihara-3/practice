@@ -1,6 +1,7 @@
 import logging
 import os
 import glob
+import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -29,6 +30,150 @@ def format_tree(path: Path, prefix: str = "", is_last: bool = True) -> str:
             output += format_tree(entry, new_prefix, is_last_entry)
     
     return output
+
+@mcp.tool()
+async def write_file(file_path: str, content: str, overwrite: bool = False) -> str:
+    """ファイルを作成または上書きする
+
+    Args:
+        file_path: 作成/上書きするファイルのパス
+        content: ファイルに書き込む内容
+        overwrite: 既存ファイルを上書きするかどうか（デフォルトはFalse）
+    """
+    global current_directory
+    try:
+        target_path = (current_directory / file_path).resolve()
+        
+        if target_path.exists() and not overwrite:
+            return f"Error: File already exists - {target_path}. Use overwrite=True to force write."
+        
+        # 親ディレクトリが存在しない場合は作成
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        with open(target_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        
+        return f"Successfully wrote to file: {target_path}"
+    except Exception as e:
+        logger.error(f"Error writing file: {e}")
+        return f"Error writing file: {str(e)}"
+
+@mcp.tool()
+async def append_file(file_path: str, content: str) -> str:
+    """既存のファイルに内容を追記する
+
+    Args:
+        file_path: 追記するファイルのパス
+        content: 追記する内容
+    """
+    global current_directory
+    try:
+        target_path = (current_directory / file_path).resolve()
+        
+        if not target_path.exists():
+            return f"Error: File not found - {target_path}"
+        
+        if not target_path.is_file():
+            return f"Error: Not a file - {target_path}"
+        
+        with open(target_path, 'a', encoding='utf-8') as f:
+            f.write(content)
+        
+        return f"Successfully appended to file: {target_path}"
+    except Exception as e:
+        logger.error(f"Error appending to file: {e}")
+        return f"Error appending to file: {str(e)}"
+
+@mcp.tool()
+async def copy_file(source_path: str, destination_path: str, overwrite: bool = False) -> str:
+    """ファイルをコピーする
+
+    Args:
+        source_path: コピー元のファイルパス
+        destination_path: コピー先のファイルパス
+        overwrite: 既存ファイルを上書きするかどうか（デフォルトはFalse）
+    """
+    global current_directory
+    try:
+        source = (current_directory / source_path).resolve()
+        destination = (current_directory / destination_path).resolve()
+        
+        if not source.exists():
+            return f"Error: Source file not found - {source}"
+        
+        if not source.is_file():
+            return f"Error: Source is not a file - {source}"
+        
+        if destination.exists() and not overwrite:
+            return f"Error: Destination file already exists - {destination}. Use overwrite=True to force copy."
+        
+        # 親ディレクトリが存在しない場合は作成
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        
+        shutil.copy2(source, destination)
+        return f"Successfully copied file from {source} to {destination}"
+    except Exception as e:
+        logger.error(f"Error copying file: {e}")
+        return f"Error copying file: {str(e)}"
+
+@mcp.tool()
+async def move_file(source_path: str, destination_path: str, overwrite: bool = False) -> str:
+    """ファイルを移動またはリネームする
+
+    Args:
+        source_path: 移動元のファイルパス
+        destination_path: 移動先のファイルパス
+        overwrite: 既存ファイルを上書きするかどうか（デフォルトはFalse）
+    """
+    global current_directory
+    try:
+        source = (current_directory / source_path).resolve()
+        destination = (current_directory / destination_path).resolve()
+        
+        if not source.exists():
+            return f"Error: Source file not found - {source}"
+        
+        if not source.is_file():
+            return f"Error: Source is not a file - {source}"
+        
+        if destination.exists() and not overwrite:
+            return f"Error: Destination file already exists - {destination}. Use overwrite=True to force move."
+        
+        # 親ディレクトリが存在しない場合は作成
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        
+        shutil.move(str(source), str(destination))
+        return f"Successfully moved file from {source} to {destination}"
+    except Exception as e:
+        logger.error(f"Error moving file: {e}")
+        return f"Error moving file: {str(e)}"
+
+@mcp.tool()
+async def delete_file(file_path: str, force: bool = False) -> str:
+    """ファイルを削除する
+
+    Args:
+        file_path: 削除するファイルのパス
+        force: 確認なしで削除するかどうか（デフォルトはFalse）
+    """
+    global current_directory
+    try:
+        target_path = (current_directory / file_path).resolve()
+        
+        if not target_path.exists():
+            return f"Error: File not found - {target_path}"
+        
+        if not target_path.is_file():
+            return f"Error: Not a file - {target_path}"
+        
+        if not force:
+            return f"Warning: About to delete {target_path}. Set force=True to confirm deletion."
+        
+        target_path.unlink()
+        return f"Successfully deleted file: {target_path}"
+    except Exception as e:
+        logger.error(f"Error deleting file: {e}")
+        return f"Error deleting file: {str(e)}"
 
 @mcp.tool()
 async def read_file(file_path: str) -> str:
