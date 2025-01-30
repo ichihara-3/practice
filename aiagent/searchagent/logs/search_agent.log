@@ -1,0 +1,10 @@
+2025-01-27 00:13:54,108 - search_client - INFO - Starting Search Agent client
+2025-01-27 00:14:23,300 - search_client - INFO - Processing user query: 日本の素晴らしい観光地
+2025-01-27 00:14:23,301 - search_server - INFO - Processing search request: 日本の素晴らしい観光地
+2025-01-27 00:14:24,139 - search_server - INFO - Executing search query: best tourist destinations in Japan
+2025-01-27 00:14:24,459 - search_server - WARNING - Rate limit hit, waiting 5 seconds before retry
+2025-01-27 00:14:29,465 - search_server - WARNING - Rate limit error: Rate limit exceeded. Please try again later.
+2025-01-27 00:14:29,466 - search_client - ERROR - Search error: Rate limit exceeded. Please try again later.
+Please try again after 5 seconds.
+2025-01-30 21:36:23,529 - search_client - INFO - User interrupted the program
+2025-01-30 21:36:23,536 - search_client - INFO - Search Agent client shutting down
