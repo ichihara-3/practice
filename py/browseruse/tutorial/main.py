@@ -19,12 +19,11 @@ async def main():
         task=f"""
 https://www.monotaro.com/ を開き、麺棒を検索してください。
 検索結果の中で、評価が高く、予算1万円以内の麺棒を探してください。
-その商品をカートに入れてください。
+
         """,
         llm=ChatOpenAI(model="gpt-4o"),
         browser=browser,
     )
     result = await agent.run()
     print(result)
-
 asyncio.run(main())
