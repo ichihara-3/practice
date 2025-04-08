@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["esnext"],
+    "moduleResolution": "node",
+    "rootDir": ".",
+    "outDir": "./dist", // 出力ディレクトリ（必要に応じて変更）
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["bun-types"] // Bunの型定義を読み込む
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts"], // 対象ファイル
+  "exclude": ["node_modules", "dist"] // 除外ディレクトリ
+}
