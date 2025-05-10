@@ -9,3 +9,7 @@ venv
 
 *.tfstate
 .env
+
+# mac os 
+.DS_Store
+Thumbs.db
